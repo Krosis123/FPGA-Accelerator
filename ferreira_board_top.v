@@ -27,6 +27,14 @@ module ferreira_board_top #(
     wire [4:0] cfg_write_addr;
     wire cfg_write_bank;
     wire [63:0] cfg_write_data;
+    wire run_request, response_busy;
+    wire [3:0] run_seed;
+    wire [2:0] active_genes;
+    reg remote_run;
+    reg [63:0] execution_cycles;
+    wire core_done;
+    wire [4:0] core_period;
+    wire [3:0] slow_state, fast_state;
 
     // Button synchronization + debounce.
     localparam integer DBW = (DEBOUNCE_CYCLES < 2) ? 1 :
@@ -66,7 +74,12 @@ module ferreira_board_top #(
     ) loader (
         .clk(CLK100MHZ), .reset(sys_reset),
         .uart_rx(UART_TXD_IN), .uart_tx(UART_RXD_OUT),
-        .allow_new(allow_new),
+        .allow_new(allow_new && !run_request),
+        .run_request(run_request), .run_seed(run_seed),
+        .active_genes(active_genes), .response_busy(response_busy),
+        .result_valid(remote_run && controller_state == RUN && core_done),
+        .result_period(core_period), .result_state(slow_state),
+        .result_cycles(execution_cycles),
         .graph_ready(graph_ready),
         .graph_busy(graph_busy),
         .graph_error(graph_error),
@@ -82,9 +95,6 @@ module ferreira_board_top #(
     wire core_reset = sys_reset || !graph_ready || graph_busy ||
         controller_state == WAIT || controller_state == ARM;
     wire core_start = (controller_state == START);
-    wire core_done;
-    wire [4:0] core_period;
-    wire [3:0] slow_state, fast_state;
     wire [4:0] core_substep;
     wire core_phase2;
 
@@ -119,13 +129,20 @@ module ferreira_board_top #(
             controller_state <= WAIT;
             selected_seed <= 0;
             result_period <= 0;
+            remote_run <= 0;
+            execution_cycles <= 0;
         end else if (!graph_ready || graph_busy) begin
             controller_state <= WAIT;
             result_period <= 0;
         end else begin
+            // Count rising edges after the start edge through done assertion.
+            if (controller_state == START) execution_cycles <= 0;
+            else if (controller_state == RUN && !core_done)
+                execution_cycles <= execution_cycles + 1'b1;
             case (controller_state)
-                WAIT: if (button_pressed) begin
-                    selected_seed <= SW;
+                WAIT: if (run_request || (button_pressed && !response_busy)) begin
+                    selected_seed <= run_request ? run_seed : SW;
+                    remote_run <= run_request;
                     result_period <= 0;
                     controller_state <= ARM;
                 end
@@ -135,8 +152,9 @@ module ferreira_board_top #(
                     result_period <= core_period;
                     controller_state <= SHOW;
                 end
-                SHOW: if (button_pressed) begin
-                    selected_seed <= SW;
+                SHOW: if (run_request || (button_pressed && !response_busy)) begin
+                    selected_seed <= run_request ? run_seed : SW;
+                    remote_run <= run_request;
                     result_period <= 0;
                     controller_state <= ARM;
                 end

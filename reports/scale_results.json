@@ -1,0 +1,304 @@
+[
+  {
+    "genes": 54,
+    "capacities": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "route_n": 128,
+    "banks": 13,
+    "substeps": 2,
+    "simulation": "PASS: N=54, ring period=54, low and high seed bits, substeps=2\nC:\\fpga-projects\\ferr_config\\_build\\scale\\n54_tb.v:55: $finish called at 19826000 (1ps)",
+    "production_uart_supported": false,
+    "synthesis_cells": {
+      "$scopeinfo": 114,
+      "BUFG": 1,
+      "CARRY4": 448,
+      "FDRE": 2472,
+      "IBUF": 7,
+      "INV": 2,
+      "LUT2": 1124,
+      "LUT3": 553,
+      "LUT4": 558,
+      "LUT5": 778,
+      "LUT6": 475,
+      "OBUF": 2,
+      "RAMB36E1": 12
+    },
+    "place_route_pass": true,
+    "fmax": {
+      "core.clk": {
+        "achieved": 115.83457946777344,
+        "constraint": 100
+      }
+    },
+    "utilization": {
+      "BUFGCTRL": {
+        "available": 32,
+        "used": 1
+      },
+      "CARRY4": {
+        "available": 15850,
+        "used": 448
+      },
+      "IOB33_INBUF_EN": {
+        "available": 300,
+        "used": 7
+      },
+      "IOB33_OUTBUF": {
+        "available": 300,
+        "used": 2
+      },
+      "PAD": {
+        "available": 630,
+        "used": 9
+      },
+      "PSEUDO_GND": {
+        "available": 1,
+        "used": 1
+      },
+      "PSEUDO_VCC": {
+        "available": 1,
+        "used": 1
+      },
+      "RAMB36E1": {
+        "available": 135,
+        "used": 12
+      },
+      "SLICE_FFX": {
+        "available": 126800,
+        "used": 2472
+      },
+      "SLICE_LUTX": {
+        "available": 126800,
+        "used": 5884
+      }
+    }
+  },
+  {
+    "genes": 100,
+    "capacities": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "route_n": 256,
+    "banks": 28,
+    "substeps": 2,
+    "simulation": "PASS: N=100, ring period=100, low and high seed bits, substeps=2\nC:\\fpga-projects\\ferr_config\\_build\\scale\\n100_tb.v:85: $finish called at 36686000 (1ps)",
+    "production_uart_supported": false,
+    "synthesis_cells": {
+      "$scopeinfo": 206,
+      "BUFG": 1,
+      "CARRY4": 828,
+      "FDRE": 4497,
+      "IBUF": 7,
+      "INV": 2,
+      "LUT2": 2202,
+      "LUT3": 943,
+      "LUT4": 1073,
+      "LUT5": 1447,
+      "LUT6": 1206,
+      "OBUF": 2,
+      "RAMB36E1": 26
+    },
+    "place_route_pass": false,
+    "fmax": {
+      "core.clk": {
+        "achieved": 81.60601043701172,
+        "constraint": 100
+      }
+    },
+    "utilization": {
+      "BUFGCTRL": {
+        "available": 32,
+        "used": 1
+      },
+      "CARRY4": {
+        "available": 15850,
+        "used": 828
+      },
+      "IOB33_INBUF_EN": {
+        "available": 300,
+        "used": 7
+      },
+      "IOB33_OUTBUF": {
+        "available": 300,
+        "used": 2
+      },
+      "PAD": {
+        "available": 630,
+        "used": 9
+      },
+      "PSEUDO_GND": {
+        "available": 1,
+        "used": 1
+      },
+      "PSEUDO_VCC": {
+        "available": 1,
+        "used": 1
+      },
+      "RAMB36E1": {
+        "available": 135,
+        "used": 26
+      },
+      "SLICE_FFX": {
+        "available": 126800,
+        "used": 4497
+      },
+      "SLICE_LUTX": {
+        "available": 126800,
+        "used": 11295
+      }
+    }
+  }
+]
