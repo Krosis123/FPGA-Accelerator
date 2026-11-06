@@ -1,0 +1,187 @@
+Info: Using uarch 'xilinx' for device 'xc7a100tcsg324-1'
+
+Info: Parsing XDC file...
+Info: Packing constants..
+Info: Inserting IO buffers..
+Info:     IO port 'UART_TXD_IN' driven by IBUF '$iopadmap$grn_clock25_top.UART_TXD_IN'
+Info:     IO port 'UART_RXD_OUT' driven by OBUF '$iopadmap$grn_clock25_top.UART_RXD_OUT'
+Info:     IO port 'SW[3]' driven by IBUF '$iopadmap$grn_clock25_top.SW_3'
+Info:     IO port 'SW[2]' driven by IBUF '$iopadmap$grn_clock25_top.SW_2'
+Info:     IO port 'SW[1]' driven by IBUF '$iopadmap$grn_clock25_top.SW_1'
+Info:     IO port 'SW[0]' driven by IBUF '$iopadmap$grn_clock25_top.SW'
+Info:     IO port 'LED[15]' driven by OBUF '$iopadmap$grn_clock25_top.LED_15'
+Info:     IO port 'LED[14]' driven by OBUF '$iopadmap$grn_clock25_top.LED_14'
+Info:     IO port 'LED[13]' driven by OBUF '$iopadmap$grn_clock25_top.LED_13'
+Info:     IO port 'LED[12]' driven by OBUF '$iopadmap$grn_clock25_top.LED_12'
+Info:     IO port 'LED[11]' driven by OBUF '$iopadmap$grn_clock25_top.LED_11'
+Info:     IO port 'LED[10]' driven by OBUF '$iopadmap$grn_clock25_top.LED_10'
+Info:     IO port 'LED[9]' driven by OBUF '$iopadmap$grn_clock25_top.LED_9'
+Info:     IO port 'LED[8]' driven by OBUF '$iopadmap$grn_clock25_top.LED_8'
+Info:     IO port 'LED[7]' driven by OBUF '$iopadmap$grn_clock25_top.LED_7'
+Info:     IO port 'LED[6]' driven by OBUF '$iopadmap$grn_clock25_top.LED_6'
+Info:     IO port 'LED[5]' driven by OBUF '$iopadmap$grn_clock25_top.LED_5'
+Info:     IO port 'LED[4]' driven by OBUF '$iopadmap$grn_clock25_top.LED_4'
+Info:     IO port 'LED[3]' driven by OBUF '$iopadmap$grn_clock25_top.LED_3'
+Info:     IO port 'LED[2]' driven by OBUF '$iopadmap$grn_clock25_top.LED_2'
+Info:     IO port 'LED[1]' driven by OBUF '$iopadmap$grn_clock25_top.LED_1'
+Info:     IO port 'LED[0]' driven by OBUF '$iopadmap$grn_clock25_top.LED'
+Info:     IO port 'CPU_RESETN' driven by IBUF '$iopadmap$grn_clock25_top.CPU_RESETN'
+Info:     IO port 'CLK100MHZ' driven by IBUF '$iopadmap$grn_clock25_top.CLK100MHZ'
+Info:     IO port 'BTNC' driven by IBUF '$iopadmap$grn_clock25_top.BTNC'
+Info:     Constraining 'UART_TXD_IN' to pad 'X147Y67/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'UART_RXD_OUT' to pad 'X147Y75/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'SW[3]' to pad 'X0Y132/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'SW[2]' to pad 'X0Y117/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'SW[1]' to pad 'X0Y111/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'SW[0]' to pad 'X0Y102/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[15]' to pad 'X0Y148/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[14]' to pad 'X0Y146/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[13]' to pad 'X0Y150/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[12]' to pad 'X0Y138/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[11]' to pad 'X0Y136/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[10]' to pad 'X0Y150/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[9]' to pad 'X0Y134/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[8]' to pad 'X0Y138/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[7]' to pad 'X0Y142/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[6]' to pad 'X0Y140/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[5]' to pad 'X0Y142/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[4]' to pad 'X0Y119/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[3]' to pad 'X0Y121/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[2]' to pad 'X0Y88/IOB_X0Y0.IOB33S.PAD'
+Info:     Constraining 'LED[1]' to pad 'X0Y102/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'LED[0]' to pad 'X0Y90/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'CPU_RESETN' to pad 'X0Y59/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'CLK100MHZ' to pad 'X147Y77/IOB_X0Y1.IOB33M.PAD'
+Info:     Constraining 'BTNC' to pad 'X0Y123/IOB_X0Y1.IOB33M.PAD'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.UART_TXD_IN'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.UART_RXD_OUT'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.SW_3'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.SW_2'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.SW_1'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.SW'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_15'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_14'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_13'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_12'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_11'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_10'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_9'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_8'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_7'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_6'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_5'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_4'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_3'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_2'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED_1'
+Info: Generating output buffer for '$iopadmap$grn_clock25_top.LED'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.CPU_RESETN'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.CLK100MHZ'
+Info: Generating input buffer for '$iopadmap$grn_clock25_top.BTNC'
+Info:     Created 25 PAD cells from:
+Info:             25x PAD
+Info: Preparing clocking...
+Info: Packing constants..
+Info: Packing IOLOGIC...
+Info: Packing cfg...
+Info: Packing PLLs...
+Info: Packing global buffers...
+Info:     Constrained MMCME2_ADV_MMCME2_ADV 'clock_manager' to bel 'X139Y95/MMCME2_ADV_X0Y0.MMCME2_ADV' based on dedicated routing
+Info:     Constrained BUFGCTRL 'accelerator_buffer' to bel 'X78Y103/BUFGCTRL_X0Y0.BUFGCTRL' based on dedicated routing
+Info:     Constrained BUFGCTRL 'feedback_buffer' to bel 'X78Y103/BUFGCTRL_X0Y5.BUFGCTRL' based on dedicated routing
+Info: Packing Gigabit Transceivers..
+Info: Generating derived timing constraints...
+Info:     Derived frequency constraint of 100.0 MHz for net $abc$481990$aiger$o9276
+Info:     Input frequency of PLL 'clock_manager' is constrained to 100.0 MHz
+Info:     Derived VCO frequency 800.0 MHz for PLL 'clock_manager'
+Info:     Derived frequency constraint of 25.0 MHz for net clock_raw
+Info:     Derived frequency constraint of 800.0 MHz for net feedback_raw
+Info:     Derived frequency constraint of 25.0 MHz for net clock25
+Info:     Derived frequency constraint of 800.0 MHz for net feedback
+Info: Packing MUX[789]s..
+Info: Packing carries..
+Info:    Grouped 3132 MUXCYs and 3132 XORCYs into 348 chains.
+Info:    Moved 1099 shared LUTs driving carry S inputs into the carry site.
+Info:    Duplicated 4 shared LUTs driving carry S inputs.
+Info:    Blasted 0 non-chain MUXCYs and 1 non-chain XORCYs to soft logic
+Info: Packing LUTs..
+Info:     Created 11464 SLICE_LUTX cells from:
+Info:           4446x LUT1
+Info:           1447x LUT2
+Info:           1194x LUT3
+Info:           1588x LUT4
+Info:           1397x LUT5
+Info:           1392x LUT6
+Info: Packing DRAM..
+Info:    Transformed 0 tied-low DRAM address inputs to be tied-high
+Info: Packing BRAM..
+Info: BRAM cascade scan: 12 BRAM(s), 0 tie(s) seen, 0 dropped
+Info: Packing DSPs..
+Info: Packing flipflops..
+Info:     Created 6584 SLICE_FFX cells from:
+Info:              2x FDPE
+Info:           6535x FDRE
+Info:             47x FDSE
+Info: Constrained 3343 LUTFF pairs.
+Info: Checksum: 0xcc74b483
+
+Info: Device utilisation:
+Info: 	          SLICE_LUTX:   11464/ 126800     9%
+Info: 	           SLICE_FFX:    6584/ 126800     5%
+Info: 	              CARRY4:     785/  15850     4%
+Info: 	          PSEUDO_GND:       1/      1   100%
+Info: 	          PSEUDO_VCC:       1/      1   100%
+Info: 	               HARD0:       0/   2376     0%
+Info: 	             DSP48E1:       0/    240     0%
+Info: 	                 PAD:      25/    630     3%
+Info: 	       IOB33M_OUTBUF:       0/    144     0%
+Info: 	       IOB33S_OUTBUF:       0/    144     0%
+Info: 	        IOB33_OUTBUF:      17/    300     5%
+Info: 	     IOB33M_INBUF_EN:       0/    144     0%
+Info: 	     IOB33S_INBUF_EN:       0/    144     0%
+Info: 	      IOB33_INBUF_EN:       8/    300     2%
+Info: 	IOB33M_TERM_OVERRIDE:       0/    144     0%
+Info: 	IOB33S_TERM_OVERRIDE:       0/    144     0%
+Info: 	 IOB33_TERM_OVERRIDE:       0/    300     0%
+Info: 	       PULL_OR_KEEP1:       0/    588     0%
+Info: 	            IDELAYE2:       0/    300     0%
+Info: 	        OLOGICE3_TFF:       0/    300     0%
+Info: 	      OLOGICE3_OUTFF:       0/    300     0%
+Info: 	       OLOGICE3_MISR:       0/    300     0%
+Info: 	           OSERDESE2:       0/    300     0%
+Info: 	        ILOGICE3_IFF:       0/    300     0%
+Info: 	ILOGICE3_ZHOLD_DELAY:       0/    300     0%
+Info: 	           ISERDESE2:       0/    300     0%
+Info: 	                BUFR:       0/     24     0%
+Info: 	               BUFIO:       0/     24     0%
+Info: 	            BUFGCTRL:       2/     32     6%
+Info: 	            PCIE_2_1:       0/      1     0%
+Info: 	               BSCAN:       0/      4     0%
+Info: 	            DCIRESET:       0/      1     0%
+Info: 	            DNA_PORT:       0/      1     0%
+Info: 	           EFUSE_USR:       0/      1     0%
+Info: 	                BUFG:       0/     32     0%
+Info: 	              BUFHCE:       0/     96     0%
+Info: 	            FIFO18E1:       0/    135     0%
+Info: 	       GTPE2_CHANNEL:       0/      8     0%
+Info: 	        GTPE2_COMMON:       0/      2     0%
+Info: 	         IBUFDS_GTE2:       0/      4     0%
+Info: 	          IDELAYCTRL:       0/      6     0%
+Info: 	            INVERTER:       0/    144     0%
+Info: 	          MMCME2_ADV:       1/      6    16%
+Info: 	        OLOGICE2_TFF:       0/    300     0%
+Info: 	      OLOGICE2_OUTFF:       0/    300     0%
+Info: 	           PLLE2_ADV:       0/      6     0%
+Info: 	            RAMB18E1:       0/    270     0%
+Info: 	            RAMB36E1:      12/    135     8%
+Info: 	           SELMUX2_1:       0/  48750     0%
+Info: 	        RAMBFIFO36E1:       0/    135     0%
+Info: 	           FRAME_ECC:       0/      1     0%
+Info: 	                ICAP:       0/      2     0%
+Info: 	             STARTUP:       0/      1     0%
+Info: 	          USR_ACCESS:       0/      1     0%
+Info: 	              BUFFER:       0/     42     0%
+Info: 	        ILOGICE2_IFF:       0/    300     0%
+Info: 	       OLOGICE2_MISR:       0/    300     0%
+
+Info: Program finished normally.

@@ -1,0 +1,7 @@
+PASS: 128-slot integrated UART simulation, 4 transactions
+test_parameterized128_path (test_runtime.RTLTests.test_parameterized128_path) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 49.224s
+
+OK

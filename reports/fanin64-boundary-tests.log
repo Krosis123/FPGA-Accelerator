@@ -1,0 +1,7 @@
+PASS: 64-slot integrated UART simulation, 6 transactions
+test_fanin64_boundary (test_runtime.RTLTests.test_fanin64_boundary) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 107.616s
+
+OK

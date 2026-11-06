@@ -1,0 +1,18 @@
+test_arbitrary_width_state (test_grn.HostTests.test_arbitrary_width_state) ... ok
+test_bad_source (test_grn.HostTests.test_bad_source) ... ok
+test_parse_and_lower (test_grn.HostTests.test_parse_and_lower) ... ok
+test_reference_transient_and_cycle (test_grn.HostTests.test_reference_transient_and_cycle) ... ok
+test_transport_errors (test_grn.HostTests.test_transport_errors) ... ok
+test_unsupported_and_capacity (test_grn.HostTests.test_unsupported_and_capacity) ... ok
+test_uart_against_independent_reference (test_grn.RTLTests.test_uart_against_independent_reference)
+No switch/button actions: serialize actual compiler packets into RTL. ... ok
+test_capability_discovery_and_failures (test_runtime.HostTests.test_capability_discovery_and_failures) ... ok
+test_capacity_and_rules (test_runtime.HostTests.test_capacity_and_rules) ... ok
+test_parser_independent_of_capacity (test_runtime.HostTests.test_parser_independent_of_capacity) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 14.371s
+
+OK
+PASS: 106 CPU/RTL UART executions, 5 invalid frames, timeout and recovery
+C:\Users\usman\AppData\Local\Temp\tmput7i1i0r\uart_generated_tb.v:8337: $finish called at 9212490000 (1ps)

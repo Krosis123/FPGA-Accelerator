@@ -1,0 +1,166 @@
+Using env default (nexys-a7-100t)
+-------------------------------------------------------------------------------
+Setting shell vars.
+
+
+Testbench ferreira_engine_tb.v
+
+iverilog -g2012 -o _build\default\ferreira_engine_tb.out -DAPIO_SIM=0 -I"C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx" "C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx\cells_sim.v" ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v ferreira_engine_tb.v
+
+grn_uart_runtime.v:264: warning: @* found no sensitivities so it will never trigger.
+
+vvp _build\default\ferreira_engine_tb.out -dumpfile=_build\default\ferreira_engine_tb.vcd
+
+PASS: seed=0001 period=2
+
+PASS: seed=0011 period=1
+
+--------------------------------
+
+ALL FERREIRA ENGINE TESTS PASSED
+
+--------------------------------
+
+ferreira_engine_tb.v:237: $finish called at 346000 (1ps)
+
+
+
+Testbench ferreira_pe_tb.v
+
+iverilog -g2012 -o _build\default\ferreira_pe_tb.out -DAPIO_SIM=0 -I"C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx" "C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx\cells_sim.v" ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v ferreira_pe_tb.v
+
+grn_uart_runtime.v:264: warning: @* found no sensitivities so it will never trigger.
+
+vvp _build\default\ferreira_pe_tb.out -dumpfile=_build\default\ferreira_pe_tb.vcd
+
+PASS: Inhibitor priority
+
+PASS: Activator accumulation
+
+PASS: Majority 3/5
+
+PASS: Majority 2/5
+
+------------------------------
+
+ALL FERREIRA PE TESTS PASSED
+
+------------------------------
+
+ferreira_pe_tb.v:182: $finish called at 136000 (1ps)
+
+
+
+Testbench ferreira_routed_min_tb.v
+
+iverilog -g2012 -o _build\default\ferreira_routed_min_tb.out -DAPIO_SIM=0 -I"C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx" "C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx\cells_sim.v" ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v ferreira_routed_min_tb.v
+
+grn_uart_runtime.v:264: warning: @* found no sensitivities so it will never trigger.
+
+vvp _build\default\ferreira_routed_min_tb.out -dumpfile=_build\default\ferreira_routed_min_tb.vcd
+
+PASS: Configuration 0
+
+PASS: Synchronous BRAM read
+
+PASS: Configuration 1
+
+PASS: Runtime reconfiguration
+
+PASS: Configuration overwrite
+
+--------------------------------
+
+ALL ROUTED MIN TESTS PASSED
+
+--------------------------------
+
+ferreira_routed_min_tb.v:157: $finish called at 76000 (1ps)
+
+
+
+Testbench ferreira_runtime_tb.v
+
+iverilog -g2012 -o _build\default\ferreira_runtime_tb.out -DAPIO_SIM=0 -I"C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx" "C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx\cells_sim.v" ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v ferreira_runtime_tb.v
+
+grn_uart_runtime.v:264: warning: @* found no sensitivities so it will never trigger.
+
+vvp _build\default\ferreira_runtime_tb.out -dumpfile=_build\default\ferreira_runtime_tb.vcd
+
+PASS seed=0001 period=2
+
+PASS seed=0011 period=1
+
+PASS seed=0001 period=1
+
+PASS seed=0010 period=1
+
+PASS seed=0010 period=1
+
+PASS: bad CRC rejected
+
+PASS: runtime graph reconfiguration, no bitstream change
+
+ferreira_runtime_tb.v:184: $finish called at 2608090000 (1ps)
+
+
+
+Testbench ferreira_system_tb.v
+
+iverilog -g2012 -o _build\default\ferreira_system_tb.out -DAPIO_SIM=0 -I"C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx" "C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx\cells_sim.v" ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v ferreira_system_tb.v
+
+grn_uart_runtime.v:264: warning: @* found no sensitivities so it will never trigger.
+
+vvp _build\default\ferreira_system_tb.out -dumpfile=_build\default\ferreira_system_tb.vcd
+
+PASS seed=0000 period=1 cycles=18
+
+PASS seed=0001 period=2 cycles=36
+
+PASS seed=0010 period=2 cycles=36
+
+PASS seed=0011 period=1 cycles=18
+
+PASS seed=0100 period=1 cycles=18
+
+PASS seed=0101 period=2 cycles=36
+
+PASS seed=0110 period=2 cycles=36
+
+PASS seed=0111 period=1 cycles=18
+
+PASS seed=1000 period=1 cycles=18
+
+PASS seed=1001 period=2 cycles=36
+
+PASS seed=1010 period=2 cycles=36
+
+PASS seed=1011 period=1 cycles=18
+
+PASS seed=1100 period=1 cycles=18
+
+PASS seed=1101 period=2 cycles=36
+
+PASS seed=1110 period=2 cycles=36
+
+PASS seed=1111 period=1 cycles=18
+
+PASS: all 16 seeds, integrated system
+
+ferreira_system_tb.v:144: $finish called at 5800000 (1ps)
+
+
+
+Testbench grn_uart25_tb.v
+
+iverilog -g2012 -o _build\default\grn_uart25_tb.out -DAPIO_SIM=0 -I"C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx" "C:\Users\usman\.apio\packages\oss-cad-suite\share\yosys\xilinx\cells_sim.v" ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v grn_uart25_tb.v
+
+grn_uart_runtime.v:264: warning: @* found no sensitivities so it will never trigger.
+
+vvp _build\default\grn_uart25_tb.out -dumpfile=_build\default\grn_uart25_tb.vcd
+
+PASS: 25 MHz, nominal 115200 baud, all 256 RX/TX bytes
+
+grn_uart25_tb.v:40: $finish called at 46674140000 (1ps)
+
+======================== [SUCCESS] Took 12.47 seconds =========================
