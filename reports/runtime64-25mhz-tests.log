@@ -1,0 +1,7 @@
+PASS: 64-slot integrated UART simulation, 43 transactions
+test_runtime64_25mhz (test_runtime.RTLTests.test_runtime64_25mhz) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 842.696s
+
+OK

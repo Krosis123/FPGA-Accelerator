@@ -19,7 +19,7 @@ ROOT=Path(__file__).parent
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
-    parser.add_argument('--build-env',default='runtime64-25',choices=['runtime64','runtime64-sa','runtime64-25'])
+    parser.add_argument('--build-env',default='runtime64-25',choices=['runtime64','runtime64-sa','runtime64-25','runtime64-25-r2'])
     parser.add_argument('--output',type=Path,default=ROOT/'reports/runtime64_physical.json')
     args=parser.parse_args()
     image=ROOT/'_build'/args.build_env/'hardware.bit'
@@ -38,7 +38,7 @@ def main():
         query_seconds=time.perf_counter()-query_start
         if len(profile['capacities'])!=64:
             raise RuntimeError('Physical capacity regression expects the 64-slot image')
-        if args.build_env=='runtime64-25' and profile['clock_hz']!=25000000:
+        if args.build_env.startswith('runtime64-25') and profile['clock_hz']!=25000000:
             raise RuntimeError('Selected 25 MHz build does not match the running FPGA clock declaration')
         if not any(abs(value['constraint']-profile['clock_hz']/1e6)<0.001
                    for value in timing['fmax'].values()):

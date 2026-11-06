@@ -37,5 +37,96 @@
     "experiment": "Byte pipeline, router1",
     "status": "route aborted after 711.57 seconds during control redesign; no final Fmax",
     "log": "reports/build-runtime64-router1.log"
+  },
+  {
+    "experiment": "runtime64_admission_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 66.92992401123047,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_admission_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "runtime64_chunk_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 76.69300079345703,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_chunk_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "runtime64_field_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 98.18360137939453,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_field_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "runtime64_index_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 84.53799438476562,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_index_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "runtime64_min_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 81.50623321533203,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_min_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "runtime64_reset_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 70.2740707397461,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_reset_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "runtime64_substep_failure",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 86.94895935058594,
+        "constraint": 100
+      }
+    },
+    "report": "reports/runtime64_substep_failure.pnr",
+    "status": "Measured 100 MHz timing failure; preserved; not programmed as supported image"
+  },
+  {
+    "experiment": "Simulation-verified checkpoint 8ab1481 at 100 MHz",
+    "target_mhz": 100,
+    "status": "Routing stopped at iteration 68 with 1138 overused wires; no final Fmax; architecture frozen at user request",
+    "log": "reports/build-runtime64-100mhz-preserved.log",
+    "build_archive": "artifacts/checkpoint-64-100mhz/build"
   }
 ]

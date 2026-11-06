@@ -4,8 +4,9 @@ Active: `C:\fpga-projects\ferr_config`. Reference: `C:\fpga-projects\2010_paper`
 The original four-slot code is retained; see `LEGACY_RUNTIME2.md` for its history.
 
 Status: the parameterized 64-slot UART implementation has passed integrated
-simulation, including a mixed 54-gene network with period 3,465. Final full-image
-timing and physical verification are in progress. Isolated-core timing alone
+simulation, including a mixed 54-gene network with period 3,465. A generated
+25 MHz full-image build is being qualified; 100 MHz remains a later performance
+target. Physical verification is pending. Isolated-core timing alone
 does not establish full-image support.
 
 ## Build and run
@@ -15,8 +16,8 @@ cd C:\fpga-projects\ferr_config
 py -m pip install -r requirements.txt
 py -m unittest -v test_grn test_runtime
 apio test
-apio build -e runtime64
-apio upload -e runtime64
+apio build -e runtime64-25
+apio upload -e runtime64-25
 py ferreira_upload.py --list-ports
 py grn_run.py --network examples\swap.bnet --seed 0x01 --port COM6
 py grn_run.py --network examples\runtime\ring50.bnet --seed 0x2000000000000 --port COM6
@@ -33,7 +34,7 @@ with the existing router, uploads and runs, then checks the results against an
 independent Python model. The image has 64 physical PEs with two lanes each and
 32 configuration addresses; active count is separate from physical capacity.
 
-Without `-e runtime64`, APIO still selects the preserved four-slot image.
+Without an explicit environment, APIO still selects the preserved four-slot image.
 Automatic CLI discovery recognizes its legacy NAK and selects the fixed v2
 profile. Explicit legacy selection is `--profile hardware_profile.json`.
 
@@ -42,6 +43,8 @@ py grn_run.py --network examples\runtime\ring50.bnet --seed 0x2000000000000 --dr
 ```
 
 Dry-run defaults to `profiles/runtime64.json` and never claims FPGA execution.
+Use `--profile profiles/runtime64-25.json` for a 25 MHz dry-run packet. Live
+execution discovers the installed clock and capacities automatically.
 An explicit live v3 `--profile` must match discovery. A JSON profile alone cannot
 extend a hardware image's capacity.
 
@@ -82,7 +85,7 @@ hardware cycles/time at the declared clock. `--timeout` controls serial timeouts
 disagreements cause nonzero exit. No Fmax-only speedup is claimed.
 
 ```powershell
-py runtime_validate.py --port COM6
+py runtime_validate.py --port COM6 --build-env runtime64-25
 ```
 
 This regression uses one connection and no programming calls between different

@@ -5,13 +5,19 @@ two lanes per PE, 128 MIN lines, 32 substeps and MAX_DEGREE=256. At runtime the
 host supplies active count, seed, rules, degrees, routing and substep count.
 No network edges or update functions are present in this top's Verilog.
 `ferreira_system`, `ferreira_engine`, `ferreira_min` and `ferreira_pe` are reused.
-The two-state-bank Floyd detector and two-clock routing substep are unchanged.
+The two-state-bank Floyd detector is retained.
 
-An optional `PIPE_ROUTING=2` mode registers the middle of the same MIN and aligns
+The selected `PIPE_ROUTING=2` mode registers the middle of the same MIN and aligns
 the valid/inhibitor masks, using wait/capture/commit (three clocks per substep).
-It is available for timing experiments and the 128-slot simulation pathway.
 The selected mode is reported in capabilities; it does not alter Boolean
-semantics or the Floyd algorithm. The 64-slot default retains mode 1.
+semantics or the Floyd algorithm. The verified 64-slot checkpoint uses mode 2,
+registered PE chunk reduction and registered control strobes. These are retained
+without further datapath changes in the lower-clock image.
+
+`grn_clock25_top` generates 25 MHz from the board's 100 MHz oscillator with an
+MMCM and BUFGs, and sets the runtime/UART `CLOCK_HZ` accordingly. Nextpnr derives
+the 25 MHz constraint from the 10 ns input clock and MMCM settings. See
+`LOWER_CLOCK.md` for qualification evidence and commands.
 
 `N`, PE layout, routing geometry and RAM depth are module parameters. The same
 source elaborates at 128 slots in integrated simulation. That does not declare
