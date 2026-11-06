@@ -1,0 +1,35 @@
+{
+  "git_commit_at_programming": "72a1aff",
+  "rtl_checkpoint": "8ab1481",
+  "build_env": "runtime64-25-spread",
+  "operating_hz": 25000000,
+  "oscillator_constraint_ns": 10,
+  "resource_primitives": {
+    "LUT2": 1445,
+    "LUT5": 1397,
+    "LUT4": 1587,
+    "LUT6": 1392,
+    "LUT3": 1194,
+    "INV": 46,
+    "CARRY4": 783,
+    "FDRE": 6535,
+    "FDSE": 47,
+    "FDPE": 2,
+    "IBUF": 8,
+    "OBUF": 17,
+    "BUFG": 2,
+    "MMCME2_BASE": 1,
+    "$scopeinfo": 138,
+    "RAMB36E1": 12
+  },
+  "files": {
+    "_build\\runtime64-25-spread\\hardware.bit": "998ba901453945cd00f4649d9d1f9ab019d707cc3a8e0376267d45da2d749b24",
+    "_build\\runtime64-25-spread\\hardware.json": "9f175ac6f8dd1203c8d715ca9e37cc826c1f3c3a2919ead8012ddf1180baf813",
+    "_build\\runtime64-25-spread\\hardware.pnr": "5f9882e177c26553d7fcb6b5cdefdd27ca9fefd39979da2371d9c8594b7656e7",
+    "pins.xdc": "b818fe728f109d7b486eae0358f409c5d81d19204c8cfc305f9cd07ac68d16b9",
+    "grn_clock25_top.v": "435294140a7b718b3eb5361ed330cda0ea30fd7a3399ceb3986c909d62ccd936"
+  },
+  "physical_report": "reports/runtime64_physical.json",
+  "programming_log": "reports/runtime64-25-programming.log",
+  "physical_success": true
+}

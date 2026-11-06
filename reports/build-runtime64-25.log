@@ -1,0 +1,19 @@
+No suitable cached remote config file (stale).
+Fetching 
+'https://github.com/fpgawars/apio/raw/main/remote-config/apio-1.7.x.jsonc'
+Using env runtime64-25 (nexys-a7-100t)
+-------------------------------------------------------------------------------
+Setting shell vars.
+yosys -p "synth_xilinx -arch xc7 -top grn_clock25_top -flatten; write_json _build\runtime64-25\hardware.json " -q -DSYNTHESIZE ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v
+
+grn_clock25_top.v:17: Warning: Replacing floating point parameter clock_manager.CLKIN1_PERIOD = 10.000000 with string.
+
+grn_clock25_top.v:17: Warning: Replacing floating point parameter clock_manager.CLKFBOUT_MULT_F = 8.000000 with string.
+
+grn_clock25_top.v:17: Warning: Replacing floating point parameter clock_manager.CLKOUT0_DIVIDE_F = 32.000000 with string.
+
+nextpnr-xilinx --device xc7a100tcsg324-1 -o xdc=pins.xdc -o fasm=_build\runtime64-25\hardware.fasm --json _build\runtime64-25\hardware.json --report _build\runtime64-25\hardware.pnr -q --router router1 --threads 4
+
+scons: *** [_build\runtime64-25\hardware.fasm] Error 4294967295
+
+======================== [ERROR] Took 1865.94 seconds =========================

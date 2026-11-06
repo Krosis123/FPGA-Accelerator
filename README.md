@@ -3,11 +3,12 @@
 Active: `C:\fpga-projects\ferr_config`. Reference: `C:\fpga-projects\2010_paper`.
 The original four-slot code is retained; see `LEGACY_RUNTIME2.md` for its history.
 
-Status: the parameterized 64-slot UART implementation has passed integrated
-simulation, including a mixed 54-gene network with period 3,465. A generated
-25 MHz full-image build is being qualified; 100 MHz remains a later performance
-target. Physical verification is pending. Isolated-core timing alone
-does not establish full-image support.
+Status: the full 64-slot image is physically verified on the Nexys A7-100T at
+an MMCM-generated 25 MHz. One unchanged bitstream passed 27 UART executions,
+including four structurally different 50+ gene networks, with independent CPU
+period/state comparisons and exact execution-clock checks. CRC rejection and
+recovery passed. The retained datapath and Floyd engine are unchanged from
+checkpoint `8ab1481`. 100 MHz remains a later performance target.
 
 ## Build and run
 
@@ -16,8 +17,8 @@ cd C:\fpga-projects\ferr_config
 py -m pip install -r requirements.txt
 py -m unittest -v test_grn test_runtime
 apio test
-apio build -e runtime64-25
-apio upload -e runtime64-25
+apio build -e runtime64-25-spread
+apio upload -e runtime64-25-spread
 py ferreira_upload.py --list-ports
 py grn_run.py --network examples\swap.bnet --seed 0x01 --port COM6
 py grn_run.py --network examples\runtime\ring50.bnet --seed 0x2000000000000 --port COM6
@@ -85,7 +86,7 @@ hardware cycles/time at the declared clock. `--timeout` controls serial timeouts
 disagreements cause nonzero exit. No Fmax-only speedup is claimed.
 
 ```powershell
-py runtime_validate.py --port COM6 --build-env runtime64-25
+py runtime_validate.py --port COM6 --build-env runtime64-25-spread
 ```
 
 This regression uses one connection and no programming calls between different
@@ -93,6 +94,9 @@ This regression uses one connection and no programming calls between different
 four feedback components driving a majority/inhibition chain, and a 64-gene
 broadcast using all 32 substeps. Results, timings and image hash are written to
 `reports/runtime64_physical.json`; bad-CRC rejection and recovery are checked.
+
+The measured 25 MHz results are summarized in `LOWER_CLOCK.md`. This is the
+qualified profile; the other build environments are preserved experiments.
 
 `test_runtime.py` exercises actual UART pins and the integrated backend. The same
 RTL also elaborates at 128 slots with seed bit 127 set. That is a pathway check,

@@ -152,6 +152,44 @@ budget; no device abort/watchdog command or resume/retry protocol; no hardware
 cycle-state extraction; fixed production v2 packet widths; no independent FPGA
 source-path semantic validator. UART is stopped-and-waited, not queued.
 
+## 2026-11-07: 64-slot runtime physical qualification
+
+This update supersedes the earlier four-slot production limitations above.
+Protocol v3 now discovers capacity and clock, transfers variable-width seeds,
+rules, degrees and routing, and returns period, a cycle member and execution
+clocks. CSV/BNET parsing is independent of physical capacity. Unsupported
+functions and capacity/routing violations are rejected explicitly.
+
+The latest verified datapath was committed as `8ab1481` before the clock change.
+No PE, MIN, Floyd or pipeline edits were made afterward. `grn_clock25_top.v`
+adds a proper 25 MHz MMCM clock and matching UART/timeout parameters while the
+physical input constraint stays 100 MHz. The selected build environment is
+`runtime64-25-spread`; congestion-aware placement resolved a tool-routing
+bottleneck without modifying the netlist architecture.
+
+Correctness evidence: 43 integrated 25 MHz UART simulation transactions; all six
+APIO testbenches; ten Python host/legacy tests. Physical evidence: 27 runs over
+one COM6 connection on one bitstream, including ring50, mixed54, broadcast64
+and majority64, plus CRC rejection/recovery. Hardware periods, cycle members
+and exact clock counts matched the independent CPU reference/schedule. Separate
+`grn_run.py` calls for those four topologies passed without reprogramming.
+
+Performance evidence: actual operating clock 25 MHz, routed Fmax estimate
+123.137543 MHz for that image; synthesis 7015 LUT primitives, 6584 FFs,
+12 BRAM36s, zero DSPs. FPGA clocks, nominal compute time, configuration bytes,
+observed ACK/transaction time and CPU time are in
+`reports/runtime64_physical.json`. These are separate measurements, not an
+end-to-end speedup claim. See `LOWER_CLOCK.md` for the compact results table,
+tool options, bitstream hash, preservation locations and exact build commands.
+
+Negative/incomplete records: historical 100 MHz timing failures are retained;
+the latest 100 MHz route had no final timing result when stopped. Other
+unfinished 25 MHz tool attempts were stopped and archived after the successful
+one. Neither placement timing nor a software profile counts as a board result.
+128 slots remain simulation-only. Hardware transient/entry/cycle extraction,
+abort/watchdog, broader Boolean-function support and complete enumeration remain
+unfinished. No paper-fidelity, novelty or 100 MHz physical-support claim is made.
+
 ## Research records
 
 | Classification | Evidence/status |

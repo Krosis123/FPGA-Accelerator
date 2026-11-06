@@ -78,6 +78,6 @@
     "AI",
     "MAJ"
   ],
-  "physical_validation": "pending",
+  "physical_validation": "2026-11-07: 27 UART runs plus CRC rejection/recovery; reports/runtime64_physical.json",
   "capability_crc": 40870
 }

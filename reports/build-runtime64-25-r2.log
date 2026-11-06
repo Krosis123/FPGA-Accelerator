@@ -1,0 +1,560 @@
+Using env runtime64-25-r2 (nexys-a7-100t)
+-------------------------------------------------------------------------------
+Setting shell vars.
+yosys -p "synth_xilinx -arch xc7 -top grn_clock25_top -flatten; write_json _build\runtime64-25-r2\hardware.json " -q -DSYNTHESIZE ferreira_board_top.v ferreira_engine.v ferreira_min.v ferreira_pe.v ferreira_system.v ferreira_uart.v ferreira_uart_loader.v grn_board_top.v grn_clock25_top.v grn_uart_runtime.v experiments\scale_top.v
+
+grn_clock25_top.v:20: Warning: Replacing floating point parameter clock_manager.CLKIN1_PERIOD = 10.000000 with string.
+
+grn_clock25_top.v:20: Warning: Replacing floating point parameter clock_manager.CLKFBOUT_MULT_F = 8.000000 with string.
+
+grn_clock25_top.v:20: Warning: Replacing floating point parameter clock_manager.CLKOUT0_DIVIDE_F = 32.000000 with string.
+
+nextpnr-xilinx --device xc7a100tcsg324-1 -o xdc=pins.xdc -o fasm=_build\runtime64-25-r2\hardware.fasm --json _build\runtime64-25-r2\hardware.json --report _build\runtime64-25-r2\hardware.pnr --router router2 --threads 4
+
+Using uarch 'xilinx' for device 'xc7a100tcsg324-1'
+
+
+
+Parsing XDC file...
+
+Packing constants..
+
+Inserting IO buffers..
+
+    IO port 'UART_TXD_IN' driven by IBUF '$iopadmap$grn_clock25_top.UART_TXD_IN'
+
+    IO port 'UART_RXD_OUT' driven by OBUF '$iopadmap$grn_clock25_top.UART_RXD_OUT'
+
+    IO port 'SW[3]' driven by IBUF '$iopadmap$grn_clock25_top.SW_3'
+
+    IO port 'SW[2]' driven by IBUF '$iopadmap$grn_clock25_top.SW_2'
+
+    IO port 'SW[1]' driven by IBUF '$iopadmap$grn_clock25_top.SW_1'
+
+    IO port 'SW[0]' driven by IBUF '$iopadmap$grn_clock25_top.SW'
+
+    IO port 'LED[15]' driven by OBUF '$iopadmap$grn_clock25_top.LED_15'
+
+    IO port 'LED[14]' driven by OBUF '$iopadmap$grn_clock25_top.LED_14'
+
+    IO port 'LED[13]' driven by OBUF '$iopadmap$grn_clock25_top.LED_13'
+
+    IO port 'LED[12]' driven by OBUF '$iopadmap$grn_clock25_top.LED_12'
+
+    IO port 'LED[11]' driven by OBUF '$iopadmap$grn_clock25_top.LED_11'
+
+    IO port 'LED[10]' driven by OBUF '$iopadmap$grn_clock25_top.LED_10'
+
+    IO port 'LED[9]' driven by OBUF '$iopadmap$grn_clock25_top.LED_9'
+
+    IO port 'LED[8]' driven by OBUF '$iopadmap$grn_clock25_top.LED_8'
+
+    IO port 'LED[7]' driven by OBUF '$iopadmap$grn_clock25_top.LED_7'
+
+    IO port 'LED[6]' driven by OBUF '$iopadmap$grn_clock25_top.LED_6'
+
+    IO port 'LED[5]' driven by OBUF '$iopadmap$grn_clock25_top.LED_5'
+
+    IO port 'LED[4]' driven by OBUF '$iopadmap$grn_clock25_top.LED_4'
+
+    IO port 'LED[3]' driven by OBUF '$iopadmap$grn_clock25_top.LED_3'
+
+    IO port 'LED[2]' driven by OBUF '$iopadmap$grn_clock25_top.LED_2'
+
+    IO port 'LED[1]' driven by OBUF '$iopadmap$grn_clock25_top.LED_1'
+
+    IO port 'LED[0]' driven by OBUF '$iopadmap$grn_clock25_top.LED'
+
+    IO port 'CPU_RESETN' driven by IBUF '$iopadmap$grn_clock25_top.CPU_RESETN'
+
+    IO port 'CLK100MHZ' driven by IBUF '$iopadmap$grn_clock25_top.CLK100MHZ'
+
+    IO port 'BTNC' driven by IBUF '$iopadmap$grn_clock25_top.BTNC'
+
+    Constraining 'UART_TXD_IN' to pad 'X147Y67/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'UART_RXD_OUT' to pad 'X147Y75/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'SW[3]' to pad 'X0Y132/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'SW[2]' to pad 'X0Y117/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'SW[1]' to pad 'X0Y111/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'SW[0]' to pad 'X0Y102/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[15]' to pad 'X0Y148/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[14]' to pad 'X0Y146/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[13]' to pad 'X0Y150/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[12]' to pad 'X0Y138/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[11]' to pad 'X0Y136/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[10]' to pad 'X0Y150/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[9]' to pad 'X0Y134/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[8]' to pad 'X0Y138/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[7]' to pad 'X0Y142/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[6]' to pad 'X0Y140/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[5]' to pad 'X0Y142/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[4]' to pad 'X0Y119/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[3]' to pad 'X0Y121/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[2]' to pad 'X0Y88/IOB_X0Y0.IOB33S.PAD'
+
+    Constraining 'LED[1]' to pad 'X0Y102/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'LED[0]' to pad 'X0Y90/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'CPU_RESETN' to pad 'X0Y59/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'CLK100MHZ' to pad 'X147Y77/IOB_X0Y1.IOB33M.PAD'
+
+    Constraining 'BTNC' to pad 'X0Y123/IOB_X0Y1.IOB33M.PAD'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.UART_TXD_IN'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.UART_RXD_OUT'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.SW_3'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.SW_2'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.SW_1'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.SW'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_15'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_14'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_13'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_12'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_11'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_10'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_9'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_8'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_7'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_6'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_5'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_4'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_3'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_2'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED_1'
+
+Generating output buffer for '$iopadmap$grn_clock25_top.LED'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.CPU_RESETN'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.CLK100MHZ'
+
+Generating input buffer for '$iopadmap$grn_clock25_top.BTNC'
+
+    Created 25 PAD cells from:
+
+            25x PAD
+
+Preparing clocking...
+
+Packing constants..
+
+Packing IOLOGIC...
+
+Packing cfg...
+
+Packing PLLs...
+
+Packing global buffers...
+
+    Constrained MMCME2_ADV_MMCME2_ADV 'clock_manager' to bel 'X139Y95/MMCME2_ADV_X0Y0.MMCME2_ADV' based on dedicated routing
+
+    Constrained BUFGCTRL 'accelerator_buffer' to bel 'X78Y103/BUFGCTRL_X0Y0.BUFGCTRL' based on dedicated routing
+
+    Constrained BUFGCTRL 'feedback_buffer' to bel 'X78Y103/BUFGCTRL_X0Y5.BUFGCTRL' based on dedicated routing
+
+Packing Gigabit Transceivers..
+
+Generating derived timing constraints...
+
+    Derived frequency constraint of 100.0 MHz for net $abc$481990$aiger$o9276
+
+    Input frequency of PLL 'clock_manager' is constrained to 100.0 MHz
+
+    Derived VCO frequency 800.0 MHz for PLL 'clock_manager'
+
+    Derived frequency constraint of 25.0 MHz for net clock_raw
+
+    Derived frequency constraint of 800.0 MHz for net feedback_raw
+
+    Derived frequency constraint of 25.0 MHz for net clock25
+
+    Derived frequency constraint of 800.0 MHz for net feedback
+
+Packing MUX[789]s..
+
+Packing carries..
+
+   Grouped 3132 MUXCYs and 3132 XORCYs into 348 chains.
+
+   Moved 1099 shared LUTs driving carry S inputs into the carry site.
+
+   Duplicated 4 shared LUTs driving carry S inputs.
+
+   Blasted 0 non-chain MUXCYs and 1 non-chain XORCYs to soft logic
+
+Packing LUTs..
+
+    Created 11464 SLICE_LUTX cells from:
+
+          4446x LUT1
+
+          1447x LUT2
+
+          1194x LUT3
+
+          1588x LUT4
+
+          1397x LUT5
+
+          1392x LUT6
+
+Packing DRAM..
+
+   Transformed 0 tied-low DRAM address inputs to be tied-high
+
+Packing BRAM..
+
+BRAM cascade scan: 12 BRAM(s), 0 tie(s) seen, 0 dropped
+
+Packing DSPs..
+
+Packing flipflops..
+
+    Created 6584 SLICE_FFX cells from:
+
+             2x FDPE
+
+          6535x FDRE
+
+            47x FDSE
+
+Constrained 3343 LUTFF pairs.
+
+Checksum: 0x1f3dd741
+
+
+
+Device utilisation:
+
+	          SLICE_LUTX:   11464/ 126800     9%
+
+	           SLICE_FFX:    6584/ 126800     5%
+
+	              CARRY4:     785/  15850     4%
+
+	          PSEUDO_GND:       1/      1   100%
+
+	          PSEUDO_VCC:       1/      1   100%
+
+	               HARD0:       0/   2376     0%
+
+	             DSP48E1:       0/    240     0%
+
+	                 PAD:      25/    630     3%
+
+	       IOB33M_OUTBUF:       0/    144     0%
+
+	       IOB33S_OUTBUF:       0/    144     0%
+
+	        IOB33_OUTBUF:      17/    300     5%
+
+	     IOB33M_INBUF_EN:       0/    144     0%
+
+	     IOB33S_INBUF_EN:       0/    144     0%
+
+	      IOB33_INBUF_EN:       8/    300     2%
+
+	IOB33M_TERM_OVERRIDE:       0/    144     0%
+
+	IOB33S_TERM_OVERRIDE:       0/    144     0%
+
+	 IOB33_TERM_OVERRIDE:       0/    300     0%
+
+	       PULL_OR_KEEP1:       0/    588     0%
+
+	            IDELAYE2:       0/    300     0%
+
+	        OLOGICE3_TFF:       0/    300     0%
+
+	      OLOGICE3_OUTFF:       0/    300     0%
+
+	       OLOGICE3_MISR:       0/    300     0%
+
+	           OSERDESE2:       0/    300     0%
+
+	        ILOGICE3_IFF:       0/    300     0%
+
+	ILOGICE3_ZHOLD_DELAY:       0/    300     0%
+
+	           ISERDESE2:       0/    300     0%
+
+	                BUFR:       0/     24     0%
+
+	               BUFIO:       0/     24     0%
+
+	            BUFGCTRL:       2/     32     6%
+
+	            PCIE_2_1:       0/      1     0%
+
+	               BSCAN:       0/      4     0%
+
+	            DCIRESET:       0/      1     0%
+
+	            DNA_PORT:       0/      1     0%
+
+	           EFUSE_USR:       0/      1     0%
+
+	                BUFG:       0/     32     0%
+
+	              BUFHCE:       0/     96     0%
+
+	            FIFO18E1:       0/    135     0%
+
+	       GTPE2_CHANNEL:       0/      8     0%
+
+	        GTPE2_COMMON:       0/      2     0%
+
+	         IBUFDS_GTE2:       0/      4     0%
+
+	          IDELAYCTRL:       0/      6     0%
+
+	            INVERTER:       0/    144     0%
+
+	          MMCME2_ADV:       1/      6    16%
+
+	        OLOGICE2_TFF:       0/    300     0%
+
+	      OLOGICE2_OUTFF:       0/    300     0%
+
+	           PLLE2_ADV:       0/      6     0%
+
+	            RAMB18E1:       0/    270     0%
+
+	            RAMB36E1:      12/    135     8%
+
+	           SELMUX2_1:       0/  48750     0%
+
+	        RAMBFIFO36E1:       0/    135     0%
+
+	           FRAME_ECC:       0/      1     0%
+
+	                ICAP:       0/      2     0%
+
+	             STARTUP:       0/      1     0%
+
+	          USR_ACCESS:       0/      1     0%
+
+	              BUFFER:       0/     42     0%
+
+	        ILOGICE2_IFF:       0/    300     0%
+
+	       OLOGICE2_MISR:       0/    300     0%
+
+
+
+    source at X72Y103 reached 816 of 2401 offsets
+
+    source at X59Y110 reached 658 of 2401 offsets
+
+    source at X84Y94 reached 799 of 2401 offsets
+
+Delay matrix: 1675 of 2401 offsets measured from 3 sources in 1.67s (window 24).
+
+Delay matrix: interpolated 726 structural holes.
+
+Delay matrix: out-of-window rates 13.1 ps/tile (x), 20.6 ps/tile (y).
+
+Indexed 50 control sets.
+
+Placed 25 cells based on constraints.
+
+Creating initial analytic placement for 8799 cells, random placement wirelen = 2468324.
+
+    at initial placer iter 0, wirelen = 5079
+
+    at initial placer iter 1, wirelen = 5361
+
+    at initial placer iter 2, wirelen = 4911
+
+    at initial placer iter 3, wirelen = 4724
+
+Running main analytical placer, max placement attempts per cell = 44651250.
+
+    at iteration #1, type ALL: wirelen solved = 4614, spread = 369349, legal = 733768; time = 20.88s
+
+    at iteration #2, type ALL: wirelen solved = 10311, spread = 321635, legal = 644931; time = 18.46s
+
+    at iteration #3, type ALL: wirelen solved = 22599, spread = 282245, legal = 590366; time = 17.83s
+
+    at iteration #4, type ALL: wirelen solved = 39061, spread = 252012, legal = 529024; time = 17.86s
+
+    at iteration #5, type ALL: wirelen solved = 51860, spread = 216663, legal = 468323; time = 17.72s
+
+    at iteration #6, type ALL: wirelen solved = 66477, spread = 213444, legal = 459190; time = 16.30s
+
+    at iteration #7, type ALL: wirelen solved = 73658, spread = 221007, legal = 449772; time = 12.97s
+
+    at iteration #8, type ALL: wirelen solved = 80224, spread = 193894, legal = 408972; time = 12.17s
+
+    at iteration #9, type ALL: wirelen solved = 86286, spread = 193680, legal = 351613; time = 10.26s
+
+    at iteration #10, type ALL: wirelen solved = 88424, spread = 186054, legal = 350639; time = 9.82s
+
+    at iteration #11, type ALL: wirelen solved = 93079, spread = 182061, legal = 375629; time = 11.86s
+
+    at iteration #12, type ALL: wirelen solved = 92998, spread = 197813, legal = 377818; time = 9.56s
+
+    at iteration #13, type ALL: wirelen solved = 100325, spread = 183321, legal = 357518; time = 9.21s
+
+    at iteration #14, type ALL: wirelen solved = 102929, spread = 182066, legal = 356998; time = 9.81s
+
+    at iteration #15, type ALL: wirelen solved = 103950, spread = 179222, legal = 379864; time = 10.50s
+
+HeAP Placer Time: 209.25s
+
+  of which solving equations: 7.77s
+
+  of which spreading cells: 1.65s
+
+  of which strict legalisation: 195.96s
+
+
+
+Running simulated annealing placer for refinement.
+
+  at iteration #1: temp = 0.000000, timing cost = 1110, wirelen = 350639
+
+  at iteration #5: temp = 0.000000, timing cost = 997, wirelen = 314508
+
+  at iteration #10: temp = 0.000000, timing cost = 884, wirelen = 304082
+
+  at iteration #15: temp = 0.000000, timing cost = 875, wirelen = 301167
+
+  at iteration #20: temp = 0.000000, timing cost = 835, wirelen = 299726
+
+  at iteration #25: temp = 0.000000, timing cost = 828, wirelen = 299299
+
+  at iteration #30: temp = 0.000000, timing cost = 841, wirelen = 299078
+
+  at iteration #35: temp = 0.000000, timing cost = 836, wirelen = 298954
+
+  at iteration #39: temp = 0.000000, timing cost = 840, wirelen = 298898 
+
+SA placement time 47.02s
+
+
+
+Max frequency for clock 'clock25': 118.34 MHz (PASS at 25.00 MHz)
+
+
+
+Slack histogram:
+
+ legend: * represents 56 endpoint(s)
+
+         + represents [1,56) endpoint(s)
+
+[ 31550,  31944) |**+
+
+[ 31944,  32338) |*+
+
+[ 32338,  32732) |*****+
+
+[ 32732,  33126) |*****+
+
+[ 33126,  33520) |**+
+
+[ 33520,  33914) |******+
+
+[ 33914,  34308) |******+
+
+[ 34308,  34702) |********+
+
+[ 34702,  35096) |*********+
+
+[ 35096,  35490) |****************+
+
+[ 35490,  35884) |*********+
+
+[ 35884,  36278) |*****************+
+
+[ 36278,  36672) |*************+
+
+[ 36672,  37066) |*********************+
+
+[ 37066,  37460) |*********************+
+
+[ 37460,  37854) |*********************+
+
+[ 37854,  38248) |******************+
+
+[ 38248,  38642) |*************************+
+
+[ 38642,  39036) |************************************************************ 
+
+[ 39036,  39430) |***********+
+
+Checksum: 0x683d39da
+
+Running post-placement legalisation...
+
+Routing global clocks...
+
+    routing clock 'clock25'
+
+    routing clock 'feedback_raw'
+
+    routing clock 'feedback'
+
+    routing clock 'clock_raw'
+
+    routing clock '$abc$481990$aiger$o9276'
+
+Running router2...
+
+Setting up routing resources...
+
+Running main router loop...
+
+    iter=1 wires=287643 overused=20078 overuse=22338 archfail=NA
+
+    iter=2 wires=304008 overused=9754 overuse=9987 archfail=NA
+
+    iter=3 wires=310943 overused=5247 overuse=5330 archfail=NA
+
+    iter=4 wires=314250 overused=3640 overuse=3689 archfail=NA
+
+scons: *** [_build\runtime64-25-r2\hardware.fasm] Error 4294967295
+
+======================== [ERROR] Took 1329.89 seconds =========================

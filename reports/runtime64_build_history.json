@@ -128,5 +128,40 @@
     "status": "Routing stopped at iteration 68 with 1138 overused wires; no final Fmax; architecture frozen at user request",
     "log": "reports/build-runtime64-100mhz-preserved.log",
     "build_archive": "artifacts/checkpoint-64-100mhz/build"
+  },
+  {
+    "experiment": "runtime64-25",
+    "target_mhz": 25,
+    "status": "Stopped after successful alternative; quiet router1: no final timing result",
+    "log": "reports/build-runtime64-25.log",
+    "build_archive": "artifacts/lower-clock-unfinished/runtime64-25"
+  },
+  {
+    "experiment": "runtime64-25-r2",
+    "target_mhz": 25,
+    "status": "Stopped after successful alternative; router2: 3640 overused wires at iteration 4; no final timing result",
+    "log": "reports/build-runtime64-25-r2.log",
+    "build_archive": "artifacts/lower-clock-unfinished/runtime64-25-r2"
+  },
+  {
+    "experiment": "runtime64-25-sa",
+    "target_mhz": 25,
+    "status": "Stopped after successful alternative; simulated-annealing placement: no final timing result",
+    "log": "reports/build-runtime64-25-sa.log",
+    "build_archive": "artifacts/lower-clock-unfinished/runtime64-25-sa"
+  },
+  {
+    "experiment": "runtime64-25-spread",
+    "target_mhz": 25,
+    "fmax": {
+      "clock25": {
+        "achieved": 123.13754272460938,
+        "constraint": 25
+      }
+    },
+    "status": "Build and physical UART validation passed",
+    "log": "reports/build-runtime64-25-spread.log",
+    "physical_report": "reports/runtime64_physical.json",
+    "architecture_changes": "None after checkpoint 8ab1481; MMCM clock wrapper only"
   }
 ]
