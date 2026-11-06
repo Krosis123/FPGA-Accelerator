@@ -98,6 +98,15 @@ module grn_uart_runtime #(
         end
     endfunction
     localparam [15:0] CAP_CRC=capability_crc(1'b0);
+    function [CAP_BYTES*8-1:0] capability_rom;
+        input unused;
+        integer i;
+        begin
+            for(i=0;i<CAP_BYTES;i=i+1) capability_rom[8*i+:8]=capability_byte(i);
+        end
+    endfunction
+    localparam [CAP_BYTES*8-1:0] CAP_ROM=capability_rom(1'b0);
+    localparam integer FRAME_BYTES=10+((CAP_BYTES>RESULT_BYTES)?CAP_BYTES:RESULT_BYTES);
 
     wire [7:0] rx_data;
     wire rx_valid, tx_busy;
@@ -116,6 +125,7 @@ module grn_uart_runtime #(
     reg [7:0] command, crc_low, frame_error;
     reg [31:0] payload_length;
     reg [PIW-1:0] payload_index;
+    reg [2:0] payload_field;
     reg [AW:0] route_address;
     reg [BW-1:0] route_bank;
     reg [15:0] rx_crc;
@@ -130,6 +140,19 @@ module grn_uart_runtime #(
     wire [63:0] incoming_word={rx_data,word_shift[63:8]};
     wire [ROUTE_N-1:0] row_valid=row_buffer[SWITCH_W+:ROUTE_N];
     wire [ROUTE_N-1:0] row_inhib=row_buffer[SWITCH_W+ROUTE_N+:ROUTE_N];
+    // The UART has at least a complete character interval between valid bytes.
+    // Decode the current field in that interval instead of driving hundreds
+    // of metadata registers directly from a payload-counter comparison.
+    always @(posedge clk) begin
+        if(reset) payload_field<=0;
+        else if(payload_index<2) payload_field<=0;
+        else if(payload_index<4) payload_field<=1;
+        else if(payload_index<6) payload_field<=2;
+        else if(payload_index<6+STATE_BYTES) payload_field<=3;
+        else if(payload_index<6+2*STATE_BYTES) payload_field<=4;
+        else if(payload_index<META_BYTES) payload_field<=5;
+        else payload_field<=6;
+    end
 
     // A response request is a one-clock event; one execution result may wait
     // behind its ACK. New frames are blocked until the response is complete.
@@ -137,12 +160,10 @@ module grn_uart_runtime #(
     reg [7:0] reply_kind, reply_error;
     reg [15:0] reply_id, run_id;
     reg sending, result_pending;
-    reg byte_ready;
-    reg [7:0] prepared_byte;
-    reg [7:0] response_kind, response_error;
-    reg [15:0] response_id, response_crc;
-    reg [TXW-1:0] response_length;
-    reg [TXW:0] tx_index;
+    reg [FRAME_BYTES*8-1:0] tx_frame;
+    reg [15:0] response_crc;
+    reg [TXW:0] remaining;
+    reg [1:0] tx_phase, magic_left;
     reg [8*PERIOD_BYTES-1:0] saved_period;
     reg [8*STATE_BYTES-1:0] saved_state;
     reg [15:0] saved_active;
@@ -153,38 +174,20 @@ module grn_uart_runtime #(
         else accept_new_q<=allow_new && !response_busy && !run_request;
     end
 
-    function [7:0] response_byte;
-        input [TXW:0] index;
-        reg [TXW:0] p;
+    function [79:0] response_header;
+        input [7:0] opcode;
+        input [15:0] ident;
+        input [31:0] length;
         begin
-            p=index-10;
-            case(index)
-                0: response_byte=8'h46;
-                1: response_byte=8'h52;
-                2: response_byte=3;
-                3: response_byte=response_kind;
-                4,5: response_byte=response_id>>(8*(index-4));
-                6,7,8,9: response_byte=response_length>>(8*(index-6));
-                default: begin
-                    if(response_kind==8'h81) response_byte=capability_byte(p);
-                    else if(response_kind==8'hff) response_byte=response_error;
-                    else if(p<2) response_byte=CAP_CRC>>(8*p);
-                    else if(p<4) response_byte=saved_active>>(8*(p-2));
-                    else if(p<4+PERIOD_BYTES) response_byte=saved_period>>(8*(p-4));
-                    else if(p<4+PERIOD_BYTES+STATE_BYTES)
-                        response_byte=saved_state>>(8*(p-4-PERIOD_BYTES));
-                    else response_byte=saved_cycles>>(8*(p-4-PERIOD_BYTES-STATE_BYTES));
-                end
-            endcase
+            response_header={length,ident,opcode,8'd3,16'h5246};
         end
     endfunction
 
     always @(posedge clk) begin
         if(reset) begin
             tx_send<=0; tx_data<=0; sending<=0; result_pending<=0;
-            byte_ready<=0; prepared_byte<=0;
-            response_kind<=0; response_error<=0; response_id<=0;
-            response_length<=0; response_crc<=16'hffff; tx_index<=0;
+            tx_frame<=0; remaining<=0; tx_phase<=0; magic_left<=0;
+            response_crc<=16'hffff;
             saved_period<=0; saved_state<=0; saved_active<=0; saved_cycles<=0;
         end else begin
             tx_send<=0;
@@ -196,28 +199,36 @@ module grn_uart_runtime #(
                 saved_cycles<=result_cycles;
             end
             if(reply_request) begin
-                sending<=1; tx_index<=0; response_crc<=16'hffff; byte_ready<=0;
-                response_kind<=reply_kind; response_id<=reply_id; response_error<=reply_error;
-                response_length<=reply_kind==8'h81 ? CAP_BYTES : reply_kind==8'hff ? 1 : 0;
-            end else if(!sending && result_pending && !tx_busy && !tx_send) begin
-                sending<=1; tx_index<=0; response_crc<=16'hffff; byte_ready<=0;
-                response_kind<=8'h82; response_id<=run_id;
-                response_length<=RESULT_BYTES; result_pending<=0;
-            end else if(sending && !tx_busy && !tx_send) begin
-                // Register byte selection separately from CRC feedback. This
-                // adds one clock per serial byte, not per Boolean transition.
-                if(!byte_ready) begin
-                    byte_ready<=1;
-                    if(tx_index==10+response_length) prepared_byte<=response_crc[7:0];
-                    else if(tx_index==11+response_length) prepared_byte<=response_crc[15:8];
-                    else prepared_byte<=response_byte(tx_index);
+                sending<=1; response_crc<=16'hffff; tx_phase<=0; magic_left<=2;
+                if(reply_kind==8'h81) begin
+                    tx_frame<={CAP_ROM,response_header(8'h81,reply_id,CAP_BYTES)};
+                    remaining<=10+CAP_BYTES;
+                end else if(reply_kind==8'hff) begin
+                    tx_frame<={reply_error,response_header(8'hff,reply_id,1)};
+                    remaining<=11;
                 end else begin
-                    byte_ready<=0; tx_send<=1; tx_data<=prepared_byte;
-                    if(tx_index==11+response_length) sending<=0;
-                    if(tx_index>=2 && tx_index<10+response_length)
-                        response_crc<=crc_byte(response_crc,prepared_byte);
-                    tx_index<=tx_index+1'b1;
+                    tx_frame<=response_header(8'h80,reply_id,0);
+                    remaining<=10;
                 end
+            end else if(!sending && result_pending && !tx_busy && !tx_send) begin
+                sending<=1; response_crc<=16'hffff; tx_phase<=0; magic_left<=2;
+                tx_frame<={saved_cycles,saved_state,saved_period,saved_active,CAP_CRC,
+                           response_header(8'h82,run_id,RESULT_BYTES)};
+                remaining<=10+RESULT_BYTES; result_pending<=0;
+            end else if(sending && !tx_busy && !tx_send) begin
+                tx_send<=1;
+                case(tx_phase)
+                    0: begin
+                        tx_data<=tx_frame[7:0]; tx_frame<=tx_frame>>8;
+                        if(magic_left!=0) magic_left<=magic_left-1'b1;
+                        else response_crc<=crc_byte(response_crc,tx_frame[7:0]);
+                        remaining<=remaining-1'b1;
+                        if(remaining==1) tx_phase<=1;
+                    end
+                    1: begin tx_data<=response_crc[7:0]; tx_phase<=2; end
+                    2: begin tx_data<=response_crc[15:8]; sending<=0; end
+                    default: sending<=0;
+                endcase
             end
         end
     end
@@ -361,13 +372,14 @@ module grn_uart_runtime #(
                     end
                     PAYLOAD: begin
                         rx_crc<=crc_byte(rx_crc,rx_data);
-                        if(payload_index<2) pending_signature[payload_index*8+:8]<=rx_data;
-                        else if(payload_index<4) pending_active[(payload_index-2)*8+:8]<=rx_data;
-                        else if(payload_index<6) pending_steps[(payload_index-4)*8+:8]<=rx_data;
-                        else if(payload_index<6+STATE_BYTES) pending_seed<={rx_data,pending_seed}>>8;
-                        else if(payload_index<6+2*STATE_BYTES) pending_rule<={rx_data,pending_rule}>>8;
-                        else if(payload_index<META_BYTES) pending_degree<={rx_data,pending_degree}>>8;
-                        else begin
+                        case(payload_field)
+                          0: pending_signature<={rx_data,pending_signature[15:8]};
+                          1: pending_active<={rx_data,pending_active[15:8]};
+                          2: pending_steps<={rx_data,pending_steps[15:8]};
+                          3: pending_seed<={rx_data,pending_seed}>>8;
+                          4: pending_rule<={rx_data,pending_rule}>>8;
+                          5: pending_degree<={rx_data,pending_degree}>>8;
+                          6: begin
                             word_shift<={rx_data,word_shift[63:8]};
                             if(word_byte==7) begin
                                 if(route_address<DEPTH) begin
@@ -381,7 +393,9 @@ module grn_uart_runtime #(
                                     validate_row<=1;
                                 end else route_bank<=route_bank+1'b1;
                             end else word_byte<=word_byte+1'b1;
-                        end
+                          end
+                          default: frame_error<=3;
+                        endcase
                         payload_index<=payload_index+1;
                         if(payload_index+1==payload_length) state<=CRC_LO;
                     end

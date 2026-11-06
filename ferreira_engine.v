@@ -10,6 +10,8 @@ module ferreira_bank #(
     parameter integer KMAX = 8,
     parameter integer MAX_DEGREE = 256,
     parameter integer CW = $clog2(MAX_DEGREE+1),
+    parameter integer PIPE_FLAGS = 0,
+    parameter integer PIPE_CHUNK = 0,
 
     // Three bits per gene encode log2(PE capacity).
     // Default: gene 0=1, gene 1=2,
@@ -26,6 +28,7 @@ module ferreira_bank #(
     input wire step_valid,
     input wire first_substep,
     input wire last_substep,
+    input wire capture_control,
 
     input wire [N*KMAX-1:0] routed_inputs,
     input wire [N*KMAX-1:0] valid_mask,
@@ -37,6 +40,24 @@ module ferreira_bank #(
     output wire [N-1:0] state
 );
 
+    reg [N-1:0] first_flags;
+    reg last_flag, commit_strobe;
+    integer c;
+    always @(posedge clk) begin
+        if(reset) begin first_flags<=0; last_flag<=0; commit_strobe<=0; end
+        else if(PIPE_FLAGS) begin
+            commit_strobe<=capture_control;
+            if(capture_control) begin
+              last_flag<=last_substep;
+              for(c=0;c<N;c=c+1)
+                // Degree-zero genes have no valid inputs and seeded-zero
+                // accumulators. Their first flag is immaterial. Qualifying
+                // here also keeps each registered control local to its PE.
+                first_flags[c]<=first_substep && (degree[c*CW+:CW]!=0);
+            end
+        end
+    end
+
     genvar g;
 
     generate
@@ -47,7 +68,7 @@ module ferreira_bank #(
 
             ferreira_pe #(
                 .K(K),
-                .MAX_DEGREE(MAX_DEGREE)
+                .MAX_DEGREE(MAX_DEGREE), .PIPE_CHUNK(PIPE_CHUNK)
             ) pe (
                 .clk(clk),
                 .reset(reset),
@@ -55,9 +76,10 @@ module ferreira_bank #(
                 .load_seed(load_seed),
                 .seed(seed[g]),
 
-                .step_valid(step_valid),
-                .first_substep(first_substep),
-                .last_substep(last_substep),
+                .step_valid(PIPE_FLAGS?commit_strobe:step_valid),
+                .first_substep(PIPE_FLAGS?first_flags[g]:first_substep),
+                .last_substep(PIPE_FLAGS?last_flag:last_substep),
+                .capture_chunk(capture_control),
 
                 .inputs(routed_inputs[g*KMAX +: K]),
                 .valid_mask(valid_mask[g*KMAX +: K]),
@@ -89,6 +111,7 @@ module ferreira_engine #(
     // Register routed data before the PE's counting logic.
     // Each routing substep takes two clocks when enabled.
     parameter integer PIPE_ROUTING = 0,
+    parameter integer PIPE_CHUNK = 0,
     parameter integer MAX_DEGREE = 256,
 
     parameter integer CW = $clog2(MAX_DEGREE+1),
@@ -207,6 +230,7 @@ module ferreira_engine #(
         PIPE_ROUTING ? valid_mask_q : valid_mask;
     wire [N*KMAX-1:0] pe_inhibitor_mask =
         PIPE_ROUTING ? inhibitor_mask_q : inhibitor_mask;
+    localparam integer CHUNK_PIPE=(PIPE_ROUTING!=0 && PIPE_CHUNK!=0);
 
     // Exposed signal is the actual PE commit edge, used for BRAM prefetch.
     assign step_valid = in_update_stage && commit_substep;
@@ -232,7 +256,7 @@ module ferreira_engine #(
         .N(N),
         .KMAX(KMAX),
         .MAX_DEGREE(MAX_DEGREE),
-        .CAP_LOG2(CAP_LOG2)
+        .CAP_LOG2(CAP_LOG2), .PIPE_FLAGS(PIPE_ROUTING!=0), .PIPE_CHUNK(CHUNK_PIPE)
     ) slow_bank (
         .clk(clk),
         .reset(reset),
@@ -242,10 +266,11 @@ module ferreira_engine #(
         .step_valid(slow_enable && commit_substep),
         .first_substep(first_substep),
         .last_substep(last_substep),
+        .capture_control(slow_enable && route_execute==CAPTURE_PHASE),
 
-        .routed_inputs(pe_inputs),
-        .valid_mask(pe_valid_mask),
-        .inhibitor_mask(pe_inhibitor_mask),
+        .routed_inputs(CHUNK_PIPE?routed_inputs:pe_inputs),
+        .valid_mask(CHUNK_PIPE?valid_mask:pe_valid_mask),
+        .inhibitor_mask(CHUNK_PIPE?inhibitor_mask:pe_inhibitor_mask),
 
         .rule(rule),
         .degree(degree),
@@ -261,7 +286,7 @@ module ferreira_engine #(
         .N(N),
         .KMAX(KMAX),
         .MAX_DEGREE(MAX_DEGREE),
-        .CAP_LOG2(CAP_LOG2)
+        .CAP_LOG2(CAP_LOG2), .PIPE_FLAGS(PIPE_ROUTING!=0), .PIPE_CHUNK(CHUNK_PIPE)
     ) fast_bank (
         .clk(clk),
         .reset(reset),
@@ -271,10 +296,11 @@ module ferreira_engine #(
         .step_valid(fast_enable && commit_substep),
         .first_substep(first_substep),
         .last_substep(last_substep),
+        .capture_control(fast_enable && route_execute==CAPTURE_PHASE),
 
-        .routed_inputs(pe_inputs),
-        .valid_mask(pe_valid_mask),
-        .inhibitor_mask(pe_inhibitor_mask),
+        .routed_inputs(CHUNK_PIPE?routed_inputs:pe_inputs),
+        .valid_mask(CHUNK_PIPE?valid_mask:pe_valid_mask),
+        .inhibitor_mask(CHUNK_PIPE?inhibitor_mask:pe_inhibitor_mask),
 
         .rule(rule),
         .degree(degree),

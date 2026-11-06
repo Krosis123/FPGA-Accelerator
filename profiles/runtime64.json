@@ -72,12 +72,12 @@
   "clock_hz": 100000000,
   "route_n": 128,
   "cw": 9,
-  "pipe_routing": 1,
+  "pipe_routing": 2,
   "seed_bytes": 8,
   "rules": [
     "AI",
     "MAJ"
   ],
   "physical_validation": "pending",
-  "capability_crc": 8824
+  "capability_crc": 43949
 }

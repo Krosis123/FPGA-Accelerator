@@ -11,7 +11,7 @@ import serial
 import grn_protocol as v3
 from grn_reference import attractor
 from grn_run import compile_network
-from runtime_cases import cases
+from runtime_cases import file_cases
 
 ROOT=Path(__file__).parent
 
@@ -19,8 +19,15 @@ ROOT=Path(__file__).parent
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
+    parser.add_argument('--build-env',default='runtime64',choices=['runtime64','runtime64-sa'])
     parser.add_argument('--output',type=Path,default=ROOT/'reports/runtime64_physical.json')
     args=parser.parse_args()
+    image=ROOT/'_build'/args.build_env/'hardware.bit'
+    pnr=ROOT/'_build'/args.build_env/'hardware.pnr'
+    timing=json.loads(pnr.read_text())
+    if not image.exists() or not timing['fmax'] or any(
+            value['achieved']<value['constraint'] for value in timing['fmax'].values()):
+        raise RuntimeError('Refusing hardware qualification: selected build has no timing-passing bitstream')
     results=[]
     with serial.Serial(args.port,115200,timeout=3,write_timeout=3) as port:
         port.reset_input_buffer()
@@ -29,7 +36,7 @@ def main():
         query_seconds=time.perf_counter()-query_start
         if len(profile['capacities'])!=64:
             raise RuntimeError('Physical capacity regression expects the 64-slot image')
-        for ident,(name,network,seed) in enumerate(cases(),2):
+        for ident,(name,network,seed) in enumerate(file_cases(),2):
             start=time.perf_counter()
             cfg=compile_network(network,profile)
             compile_seconds=time.perf_counter()-start
@@ -65,14 +72,12 @@ def main():
         recovery=v3.execute(port,packet,len(network.names),profile)
         if recovery['period']!=reference['period']:
             raise RuntimeError('Physical recovery failed')
-    image=ROOT/'_build/runtime64/hardware.bit'
-    pnr=ROOT/'_build/runtime64/hardware.pnr'
     report={'timestamp_utc':datetime.now(timezone.utc).isoformat(),'port':args.port,
             'profile':profile,'capability_query_seconds':query_seconds,
-            'programming_calls_during_test':0,'passed':len(results),
+            'programming_calls_during_test':0,'passed':len(results),'build_env':args.build_env,
             'crc_rejection_and_recovery':True,
             'bitstream_sha256':hashlib.sha256(image.read_bytes()).hexdigest(),
-            'place_route':json.loads(pnr.read_text()),'results':results}
+            'place_route':timing,'results':results}
     # Keep the machine report compact; full timing paths remain in the .pnr file.
     del report['place_route']['critical_paths']
     args.output.parent.mkdir(parents=True,exist_ok=True)

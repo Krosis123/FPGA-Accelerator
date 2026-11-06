@@ -4,7 +4,8 @@
 module ferreira_pe #(
     parameter integer K = 4,
     parameter integer MAX_DEGREE = 256,
-    parameter integer CW = $clog2(MAX_DEGREE + 1)
+    parameter integer CW = $clog2(MAX_DEGREE + 1),
+    parameter integer PIPE_CHUNK = 0
 )(
     input wire clk,
     input wire reset,
@@ -17,6 +18,7 @@ module ferreira_pe #(
     input wire step_valid,
     input wire first_substep,
     input wire last_substep,
+    input wire capture_chunk,
 
     // Routed input signals
     input wire [K-1:0] inputs,
@@ -65,19 +67,32 @@ module ferreira_pe #(
         end
     end
 
+    // Optional reduction at the existing route-capture edge. Accumulation and
+    // rule evaluation still commit on the original step_valid edge.
+    reg chunk_activator_q, chunk_inhibitor_q;
+    reg [CW-1:0] chunk_count_q;
+    always @(posedge clk) begin
+        if(reset) begin chunk_activator_q<=0; chunk_inhibitor_q<=0; chunk_count_q<=0; end
+        else if(PIPE_CHUNK && capture_chunk) begin
+            chunk_activator_q<=chunk_activator;
+            chunk_inhibitor_q<=chunk_inhibitor;
+            chunk_count_q<=chunk_count;
+        end
+    end
+
     // Include earlier sub-steps unless this is
     // the first sub-step of a new gene update.
     wire total_activator =
         (first_substep ? 1'b0 : activator_acc)
-        | chunk_activator;
+        | (PIPE_CHUNK?chunk_activator_q:chunk_activator);
 
     wire total_inhibitor =
         (first_substep ? 1'b0 : inhibitor_acc)
-        | chunk_inhibitor;
+        | (PIPE_CHUNK?chunk_inhibitor_q:chunk_inhibitor);
 
     wire [CW-1:0] total_count =
         (first_substep ? {CW{1'b0}} : count_acc)
-        + chunk_count;
+        + (PIPE_CHUNK?chunk_count_q:chunk_count);
 
     wire next_gene_state =
         rule ?

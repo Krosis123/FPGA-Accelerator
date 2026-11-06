@@ -3,7 +3,7 @@
 // Fixed physical capacity, runtime graph and active count. No network constants.
 module grn_board_top #(
     parameter integer N=64, KMAX=2, ROUTE_N=1<<$clog2(2*N), DEPTH=32,
-    parameter integer CLOCK_HZ=100000000, BAUD=115200, PIPE_ROUTING=1,
+    parameter integer CLOCK_HZ=100000000, BAUD=115200, PIPE_ROUTING=2,
     parameter [3*N-1:0] CAP_LOG2={N{3'd1}},
     parameter integer MAX_DEGREE=256, CW=$clog2(MAX_DEGREE+1), AW=$clog2(DEPTH),
     parameter integer BANKS=(((ROUTE_N/2)*($clog2(ROUTE_N)+2)+2*ROUTE_N)+63)/64,
@@ -56,7 +56,8 @@ module grn_board_top #(
         .cfg_write_bank(bank),.cfg_write_data(data),
         .result_valid(stage==RUN&&done),.result_period(period),.result_state(slow_state),.result_cycles(cycles));
     ferreira_system #(.N(N),.KMAX(KMAX),.ROUTE_N(ROUTE_N),.DEPTH(DEPTH),
-        .MAX_DEGREE(MAX_DEGREE),.SUBSTEPS(DEPTH),.RUNTIME_CONFIG(1),.PIPE_ROUTING(PIPE_ROUTING),.CAP_LOG2(CAP_LOG2)) accelerator(
+        .MAX_DEGREE(MAX_DEGREE),.SUBSTEPS(DEPTH),.RUNTIME_CONFIG(1),.PIPE_ROUTING(PIPE_ROUTING),
+        .PIPE_CHUNK(1),.CAP_LOG2(CAP_LOG2)) accelerator(
         .clk(CLK100MHZ),.reset(core_reset),.start(core_start),.seed(seed),
         .last_substep_index(last_step),.cfg_write_en(write_en),.cfg_write_addr(address),
         .cfg_write_bank(bank),.cfg_write_data(data),.rule(rule),.degree(degree),

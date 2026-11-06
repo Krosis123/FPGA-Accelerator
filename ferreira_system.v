@@ -70,6 +70,7 @@ module ferreira_system #(
     parameter integer SUBSTEPS = 2,
     parameter integer RUNTIME_CONFIG = 0,
     parameter integer PIPE_ROUTING = 0,
+    parameter integer PIPE_CHUNK = 0,
     parameter integer DEPTH = 32,
     parameter integer MAX_DEGREE = 256,
 
@@ -296,6 +297,7 @@ module ferreira_system #(
         .SUBSTEPS(SUBSTEPS),
         .RUNTIME_CONFIG(RUNTIME_CONFIG),
         .PIPE_ROUTING(PIPE_ROUTING),
+        .PIPE_CHUNK(PIPE_CHUNK),
         .MAX_DEGREE(MAX_DEGREE),
         .CAP_LOG2(CAP_LOG2)
     ) engine (

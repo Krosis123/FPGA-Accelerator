@@ -1,0 +1,5 @@
+gene,expression
+A,(A|B)&!D
+B,"MAJ(A,C,D)"
+C,B
+D,D
