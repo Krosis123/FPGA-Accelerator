@@ -16,7 +16,21 @@ module ferreira_board_top #(
     output wire UART_RXD_OUT,
     output wire [15:0] LED
 );
-    wire sys_reset = !CPU_RESETN;
+    // FPGA configuration initializes this counter. Hold every controller in
+    // reset briefly after programming, even if CPU_RESETN never goes low.
+    reg [3:0] power_on_count = 0;
+    wire power_on_reset = !(&power_on_count);
+    always @(posedge CLK100MHZ) begin
+        if (power_on_reset) power_on_count <= power_on_count + 1'b1;
+    end
+
+    // Assert the button reset asynchronously; release it on clock edges.
+    (* ASYNC_REG = "TRUE" *) reg [1:0] reset_sync = 2'b11;
+    always @(posedge CLK100MHZ or negedge CPU_RESETN) begin
+        if (!CPU_RESETN) reset_sync <= 2'b11;
+        else reset_sync <= {reset_sync[0], 1'b0};
+    end
+    wire sys_reset = power_on_reset || reset_sync[1];
 
     // Runtime graph configuration (same fixed capacities as before).
     wire graph_ready, graph_busy, graph_error;

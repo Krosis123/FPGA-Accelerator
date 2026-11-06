@@ -1,0 +1,780 @@
+{
+  "timestamp_utc": "2026-11-06T14:42:45.537982+00:00",
+  "port": "COM6",
+  "profile": "nexys-a7-ferreira4-run-v2",
+  "scope": "Physical single-seed periods and cycle members; CPU-only transient/cycle extraction",
+  "bitstream_sha256": "fdbaec4d481e3e71dd71b19ac59a3b9a88a740b72640c7c3ab127d74e3ce8b2a",
+  "passed": 40,
+  "results": [
+    {
+      "network": "swap",
+      "seed": 0,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.01472689991351217,
+        "transaction_seconds": 0.014830299885943532
+      }
+    },
+    {
+      "network": "swap",
+      "seed": 1,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 1,
+        "cycle_states": [
+          1,
+          2
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 1,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.01592160004656762,
+        "transaction_seconds": 0.01598380005452782
+      }
+    },
+    {
+      "network": "swap",
+      "seed": 2,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 2,
+        "cycle_states": [
+          2,
+          1
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 2,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.015895699965767562,
+        "transaction_seconds": 0.015979600022546947
+      }
+    },
+    {
+      "network": "swap",
+      "seed": 3,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 3,
+        "cycle_states": [
+          3
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 3,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.01574319996871054,
+        "transaction_seconds": 0.015787599957548082
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 0,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015735900029540062,
+        "transaction_seconds": 0.015790499979630113
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 1,
+      "reference": {
+        "transient": 1,
+        "period": 1,
+        "entry_state": 3,
+        "cycle_states": [
+          3
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 3,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.01588590000756085,
+        "transaction_seconds": 0.015936500043608248
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 2,
+      "reference": {
+        "transient": 2,
+        "period": 1,
+        "entry_state": 3,
+        "cycle_states": [
+          3
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 3,
+        "execution_cycles": 45,
+        "configuration_ack_seconds": 0.015849300078116357,
+        "transaction_seconds": 0.015932600013911724
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 3,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 3,
+        "cycle_states": [
+          3
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 3,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015750500024296343,
+        "transaction_seconds": 0.01583389996085316
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 4,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 4,
+        "cycle_states": [
+          4
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 4,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015872000018134713,
+        "transaction_seconds": 0.01596910005901009
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 5,
+      "reference": {
+        "transient": 2,
+        "period": 1,
+        "entry_state": 4,
+        "cycle_states": [
+          4
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 4,
+        "execution_cycles": 45,
+        "configuration_ack_seconds": 0.015754600055515766,
+        "transaction_seconds": 0.015826200018636882
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 6,
+      "reference": {
+        "transient": 1,
+        "period": 1,
+        "entry_state": 4,
+        "cycle_states": [
+          4
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 4,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015610500006005168,
+        "transaction_seconds": 0.015694099944084883
+      }
+    },
+    {
+      "network": "inhibition",
+      "seed": 7,
+      "reference": {
+        "transient": 2,
+        "period": 1,
+        "entry_state": 4,
+        "cycle_states": [
+          4
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 4,
+        "execution_cycles": 45,
+        "configuration_ack_seconds": 0.015748600009828806,
+        "transaction_seconds": 0.01582650002092123
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 0,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.014955200022086501,
+        "transaction_seconds": 0.015040200087241828
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 1,
+      "reference": {
+        "transient": 1,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015915099997073412,
+        "transaction_seconds": 0.015975099988281727
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 2,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 2,
+        "cycle_states": [
+          2
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 2,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015661300043575466,
+        "transaction_seconds": 0.01570360001642257
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 3,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 3,
+        "cycle_states": [
+          3
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 3,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.016224800026975572,
+        "transaction_seconds": 0.01626639999449253
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 4,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 4,
+        "cycle_states": [
+          4
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 4,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.01564600004348904,
+        "transaction_seconds": 0.015686200000345707
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 5,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 5,
+        "cycle_states": [
+          5
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 5,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015938300057314336,
+        "transaction_seconds": 0.015983000048436224
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 6,
+      "reference": {
+        "transient": 1,
+        "period": 1,
+        "entry_state": 7,
+        "cycle_states": [
+          7
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 7,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.01590640004724264,
+        "transaction_seconds": 0.015948900021612644
+      }
+    },
+    {
+      "network": "majority",
+      "seed": 7,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 7,
+        "cycle_states": [
+          7
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 7,
+        "execution_cycles": 26,
+        "configuration_ack_seconds": 0.015978700015693903,
+        "transaction_seconds": 0.016046099946834147
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 0,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015877800062298775,
+        "transaction_seconds": 0.015924900071695447
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 1,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 1,
+        "cycle_states": [
+          1,
+          2
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 1,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.01569050003308803,
+        "transaction_seconds": 0.015738700050860643
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 2,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 2,
+        "cycle_states": [
+          2,
+          1
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 2,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.01581150002311915,
+        "transaction_seconds": 0.01585620001424104
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 3,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 3,
+        "cycle_states": [
+          3
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 3,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015939699951559305,
+        "transaction_seconds": 0.015982600045390427
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 4,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 4,
+        "cycle_states": [
+          4
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 4,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.01591369998641312,
+        "transaction_seconds": 0.015956299961544573
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 5,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 5,
+        "cycle_states": [
+          5,
+          6
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 5,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.01596989994868636,
+        "transaction_seconds": 0.01602079998701811
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 6,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 6,
+        "cycle_states": [
+          6,
+          5
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 6,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.016050699981860816,
+        "transaction_seconds": 0.016094099963083863
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 7,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 7,
+        "cycle_states": [
+          7
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 7,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015868699993006885,
+        "transaction_seconds": 0.01591109996661544
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 8,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 8,
+        "cycle_states": [
+          8
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 8,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.016486600041389465,
+        "transaction_seconds": 0.01654350000899285
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 9,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 9,
+        "cycle_states": [
+          9,
+          10
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 9,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.01521749992389232,
+        "transaction_seconds": 0.015281699947081506
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 10,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 10,
+        "cycle_states": [
+          10,
+          9
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 10,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.015881799976341426,
+        "transaction_seconds": 0.015968400053679943
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 11,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 11,
+        "cycle_states": [
+          11
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 11,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015783200040459633,
+        "transaction_seconds": 0.015859900042414665
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 12,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 12,
+        "cycle_states": [
+          12
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 12,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015899799996986985,
+        "transaction_seconds": 0.01598200004082173
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 13,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 13,
+        "cycle_states": [
+          13,
+          14
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 13,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.015790700097568333,
+        "transaction_seconds": 0.01589030004106462
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 14,
+      "reference": {
+        "transient": 0,
+        "period": 2,
+        "entry_state": 14,
+        "cycle_states": [
+          14,
+          13
+        ]
+      },
+      "hardware": {
+        "period": 2,
+        "cycle_member": 14,
+        "execution_cycles": 36,
+        "configuration_ack_seconds": 0.015776399988681078,
+        "transaction_seconds": 0.01587120001204312
+      }
+    },
+    {
+      "network": "four_gene_swap",
+      "seed": 15,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 15,
+        "cycle_states": [
+          15
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 15,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015816900064237416,
+        "transaction_seconds": 0.01585930003784597
+      }
+    },
+    {
+      "network": "transient",
+      "seed": 0,
+      "reference": {
+        "transient": 0,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015715899993665516,
+        "transaction_seconds": 0.0158193000825122
+      }
+    },
+    {
+      "network": "transient",
+      "seed": 1,
+      "reference": {
+        "transient": 1,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 18,
+        "configuration_ack_seconds": 0.015751900034956634,
+        "transaction_seconds": 0.015849699964746833
+      }
+    },
+    {
+      "network": "transient",
+      "seed": 2,
+      "reference": {
+        "transient": 2,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 31,
+        "configuration_ack_seconds": 0.01580010005272925,
+        "transaction_seconds": 0.015892700059339404
+      }
+    },
+    {
+      "network": "transient",
+      "seed": 3,
+      "reference": {
+        "transient": 2,
+        "period": 1,
+        "entry_state": 0,
+        "cycle_states": [
+          0
+        ]
+      },
+      "hardware": {
+        "period": 1,
+        "cycle_member": 0,
+        "execution_cycles": 31,
+        "configuration_ack_seconds": 0.015951800043694675,
+        "transaction_seconds": 0.016042100032791495
+      }
+    }
+  ]
+}

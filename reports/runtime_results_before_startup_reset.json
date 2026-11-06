@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-06",
+  "scope": "four-slot production UART v2; routed static timing, not physical validation",
+  "tools": {
+    "apio": "1.7.0",
+    "yosys": "0.70+186 3718f7f13",
+    "simulator": "Icarus via APIO oss-cad-suite"
+  },
+  "fmax_mhz": {
+    "accelerator.clk": {
+      "achieved": 107.73540496826172,
+      "constraint": 100
+    }
+  },
+  "mapped_cells": {
+    "$scopeinfo": 17,
+    "BUFG": 1,
+    "CARRY4": 105,
+    "DSP48E1": 1,
+    "FDRE": 799,
+    "FDSE": 46,
+    "IBUF": 8,
+    "INV": 36,
+    "LUT2": 369,
+    "LUT3": 205,
+    "LUT4": 152,
+    "LUT5": 209,
+    "LUT6": 312,
+    "MUXF7": 7,
+    "MUXF8": 3,
+    "OBUF": 17,
+    "RAMB36E1": 2
+  },
+  "mapped_lut2_to_lut6_cells": 1247,
+  "ff_cells": 845,
+  "tests": {
+    "python_unittest_cases": 7,
+    "uart_cpu_rtl_cases": 106,
+    "invalid_frames": 5,
+    "partial_timeout_recovery": true,
+    "legacy_apio_testbenches": 5
+  },
+  "source_sha256": {
+    "ferreira_board_top.v": "dadef35fd77fadccd65d1c45413b9f1b42968e743a4f347e8b859329ddc9491a",
+    "ferreira_engine.v": "14833d3efd09e7c95e62811bf6b3035c56ebb24eed58858e19d576380a4b7c2c",
+    "ferreira_min.v": "dca7e020d5c6ca4ec088de3546ed8015e47cd4fac478255313ccc644fb114b3a",
+    "ferreira_pe.v": "5421ed387384184fd71e349c93a0f63f2805c58ab0b40fdecefd1c324dff2d5a",
+    "ferreira_system.v": "3c65e76792a7416e066562d5fb1bbb080238853017f97f1e7b368726fc05dd74",
+    "ferreira_uart.v": "b9325ab5422abae9d58eca847512230630018ecd51f571fbff01a77b8102cd61",
+    "ferreira_uart_loader.v": "cdc8b33522bcfe01bafe2f4bf262fb5c5864426f67286cdc9c1239257bae67c2"
+  },
+  "clock_constraint_sha256": "b818fe728f109d7b486eae0358f409c5d81d19204c8cfc305f9cd07ac68d16b9",
+  "bitstream_sha256": "27115ac26a397dce0435177a8d599c14bda402d815fce8a30caba7a4920783e2",
+  "profile_sha256": "01b98d53f9a3a1b829a9821826bfb25a2ba4334f98aa706ade8cedcdd7d9c101",
+  "physical_board_verified": false,
+  "raw_logs": [
+    "reports/build-run-v2.log",
+    "reports/tests-run-v2.log",
+    "reports/apio-regression.log"
+  ]
+}

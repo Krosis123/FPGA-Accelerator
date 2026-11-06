@@ -1,5 +1,30 @@
 # Codebase audit and development evidence — 2026-11-06
 
+## Physical bring-up update: startup reset
+
+After the initial milestone below, the user connected the Nexys A7 on COM6.
+The current bitstream was uploaded successfully, but a run still timed out
+waiting for ACK. Pressing CPU RESET restored communication: swap seed 1 returned
+period 2, cycle member 1 and 36 execution cycles, matching Python. This isolates
+missing startup reset as a cause of the observed timeout for that programmed
+image; simulation had previously always applied external reset.
+
+`ferreira_board_top.v` now holds the design in reset for 15 clocks after FPGA
+configuration and synchronizes external reset release. The 106-transaction UART
+simulation now starts with CPU_RESETN high and never presses reset. Seven Python
+tests and all five legacy APIO tests pass. The new image builds at 104.47 MHz
+against the unchanged 100 MHz constraint, was programmed successfully, and ran
+immediately without a manual reset.
+
+`hardware_smoke.py --port COM6` then passed 40 physical executions: all seeds of
+the two-gene swap, three-gene inhibition and majority, four-gene swap/hold, and a
+two-gene transient network. Hardware periods and cycle members matched the
+independent CPU reference. Hardware μ/cycle extraction remains unimplemented.
+Results and bitstream hash are in `reports/hardware_smoke.json`. The current
+build report is `reports/runtime_results.json`; the initial milestone report is
+preserved as `reports/runtime_results_before_startup_reset.json`. Historical
+no-board statements and the 107.74 MHz figure below refer to that earlier stage.
+
 ## Selection and preservation
 
 `C:\fpga-projects\ferr_config` is active. `C:\fpga-projects\2010_paper`

@@ -23,8 +23,22 @@ py grn_run.py --network examples\swap.bnet --seed 0x01 --port COM5
 ```
 
 The received bitstream predates run protocol v2 and must be replaced once.
-Subsequent network changes do not need synthesis. No board was programmed during
-this development session; only Bluetooth serial ports were visible.
+Subsequent network changes do not need synthesis. First COM6 hardware testing
+exposed a missing startup reset after programming: pressing CPU RESET restored
+communication. The board top now generates an automatic startup reset and
+synchronizes release of the external reset. Rebuild/upload this version to use
+it. Immediate execution after upload, without pressing reset, was verified on
+the Nexys A7, followed by 40 physical FPGA executions matching Python.
+
+To repeat those physical checks explicitly:
+
+```powershell
+py hardware_smoke.py --port COM6
+```
+
+The report is `reports/hardware_smoke.json`. The current fixed image meets the
+100 MHz constraint with routed Fmax 104.47 MHz; older reports describe earlier
+source snapshots.
 
 ## Network input and semantics
 

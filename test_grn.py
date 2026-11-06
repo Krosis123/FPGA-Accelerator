@@ -144,7 +144,8 @@ class RTLTests(unittest.TestCase):
         source = r'''
 module uart_generated_tb;
 reg clk=0; always #5 clk=~clk;
-reg resetn=0, rx=1; wire tx; wire [15:0] leds;
+// Intentionally never press reset: exercise FPGA power-on initialization.
+reg resetn=1, rx=1; wire tx; wire [15:0] leds;
 defparam dut.loader.TIMEOUT_CYCLES=3000;
 ferreira_board_top #(.BAUD(10000000)) dut(
  .CLK100MHZ(clk),.CPU_RESETN(resetn),.BTNC(1'b0),.SW(4'b1111),

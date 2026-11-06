@@ -88,6 +88,11 @@ path; `grn_run.py` needs neither.
 
 The retained core has a terminal done state. The board controller resets and
 re-arms it on each run; this behavior is covered by repeated graph/seed tests.
+The board also asserts reset for 15 startup clocks after FPGA configuration,
+using an initialized saturating counter. External CPU RESET asserts
+asynchronously and releases through two synchronizer registers. The startup
+reset was added after physical testing found that a fresh upload needed a manual
+reset before UART would respond.
 The accelerator interface still reports period only, plus pointer states.
 Adding hardware μ/entry, alternate detector algorithms, watchdog/abort commands,
 request IDs and negotiated capability discovery remains future work.

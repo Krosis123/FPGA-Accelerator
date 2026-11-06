@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "scope": "four-slot production UART v2; routed static timing, not physical validation",
+  "scope": "four-slot UART v2 after startup-reset fix; routed static timing plus 40 physical executions",
   "tools": {
     "apio": "1.7.0",
     "yosys": "0.70+186 3718f7f13",
@@ -8,31 +8,30 @@
   },
   "fmax_mhz": {
     "accelerator.clk": {
-      "achieved": 107.73540496826172,
+      "achieved": 104.47138214111328,
       "constraint": 100
     }
   },
   "mapped_cells": {
     "$scopeinfo": 17,
     "BUFG": 1,
-    "CARRY4": 105,
+    "CARRY4": 106,
     "DSP48E1": 1,
-    "FDRE": 799,
+    "FDPE": 2,
+    "FDRE": 803,
     "FDSE": 46,
     "IBUF": 8,
-    "INV": 36,
-    "LUT2": 369,
-    "LUT3": 205,
-    "LUT4": 152,
-    "LUT5": 209,
-    "LUT6": 312,
-    "MUXF7": 7,
-    "MUXF8": 3,
+    "INV": 37,
+    "LUT2": 375,
+    "LUT3": 219,
+    "LUT4": 138,
+    "LUT5": 250,
+    "LUT6": 204,
     "OBUF": 17,
     "RAMB36E1": 2
   },
-  "mapped_lut2_to_lut6_cells": 1247,
-  "ff_cells": 845,
+  "mapped_lut2_to_lut6_cells": 1186,
+  "ff_cells": 851,
   "tests": {
     "python_unittest_cases": 7,
     "uart_cpu_rtl_cases": 106,
@@ -41,7 +40,7 @@
     "legacy_apio_testbenches": 5
   },
   "source_sha256": {
-    "ferreira_board_top.v": "dadef35fd77fadccd65d1c45413b9f1b42968e743a4f347e8b859329ddc9491a",
+    "ferreira_board_top.v": "e729e20ced59da0a3ac6c3bec86b120d80059c83530ca28a14ab6d837fbfcba5",
     "ferreira_engine.v": "14833d3efd09e7c95e62811bf6b3035c56ebb24eed58858e19d576380a4b7c2c",
     "ferreira_min.v": "dca7e020d5c6ca4ec088de3546ed8015e47cd4fac478255313ccc644fb114b3a",
     "ferreira_pe.v": "5421ed387384184fd71e349c93a0f63f2805c58ab0b40fdecefd1c324dff2d5a",
@@ -50,12 +49,14 @@
     "ferreira_uart_loader.v": "cdc8b33522bcfe01bafe2f4bf262fb5c5864426f67286cdc9c1239257bae67c2"
   },
   "clock_constraint_sha256": "b818fe728f109d7b486eae0358f409c5d81d19204c8cfc305f9cd07ac68d16b9",
-  "bitstream_sha256": "27115ac26a397dce0435177a8d599c14bda402d815fce8a30caba7a4920783e2",
+  "bitstream_sha256": "fdbaec4d481e3e71dd71b19ac59a3b9a88a740b72640c7c3ab127d74e3ce8b2a",
   "profile_sha256": "01b98d53f9a3a1b829a9821826bfb25a2ba4334f98aa706ade8cedcdd7d9c101",
-  "physical_board_verified": false,
+  "physical_board_verified": true,
   "raw_logs": [
-    "reports/build-run-v2.log",
-    "reports/tests-run-v2.log",
-    "reports/apio-regression.log"
-  ]
+    "reports/build-startup-reset.log",
+    "reports/tests-startup-reset.log",
+    "reports/apio-startup-reset.log",
+    "reports/upload-startup-reset.log"
+  ],
+  "physical_results": "reports/hardware_smoke.json"
 }
