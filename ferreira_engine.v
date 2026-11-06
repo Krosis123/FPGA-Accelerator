@@ -167,12 +167,17 @@ module ferreira_engine #(
     // In pipelined mode: capture routed inputs in cycle A, commit the
     // corresponding PE update in cycle B. The stage/substep only advance
     // on cycle B, and configuration BRAM prefetch is aligned to that edge.
-    reg route_execute;
+    // Mode 2 adds a MIN middle register: wait, capture, commit. Modes 0/1
+    // retain their original latency and legacy interface behavior.
+    localparam integer RPW=(PIPE_ROUTING==2)?2:1;
+    localparam integer COMMIT_PHASE=(PIPE_ROUTING==2)?2:1;
+    localparam integer CAPTURE_PHASE=(PIPE_ROUTING==2)?1:0;
+    reg [RPW-1:0] route_execute;
     reg [N*KMAX-1:0] routed_inputs_q;
     reg [N*KMAX-1:0] valid_mask_q;
     reg [N*KMAX-1:0] inhibitor_mask_q;
     wire in_update_stage = slow_enable || fast_enable;
-    wire commit_substep = (!PIPE_ROUTING) || route_execute;
+    wire commit_substep = (!PIPE_ROUTING) || (route_execute==COMMIT_PHASE);
 
     always @(posedge clk) begin
         if (reset) begin
@@ -182,12 +187,12 @@ module ferreira_engine #(
             inhibitor_mask_q <= 0;
         end else if (PIPE_ROUTING) begin
             if (in_update_stage) begin
-                if (!route_execute) begin
+                if (route_execute==CAPTURE_PHASE) begin
                     routed_inputs_q <= routed_inputs;
                     valid_mask_q <= valid_mask;
                     inhibitor_mask_q <= inhibitor_mask;
                 end
-                route_execute <= ~route_execute;
+                route_execute <= commit_substep ? 0 : route_execute+1'b1;
             end else begin
                 route_execute <= 1'b0;
             end

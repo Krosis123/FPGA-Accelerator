@@ -1,0 +1,41 @@
+[
+  {
+    "experiment": "Full image before registered reset distribution",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 70.2740707397461,
+        "constraint": 100
+      }
+    },
+    "critical_path": "power_on_count[0]",
+    "status": "timing failure; not programmed as a supported image"
+  },
+  {
+    "experiment": "Registered reset; UART admission still combinational",
+    "target_mhz": 100,
+    "fmax": {
+      "accelerator.clk": {
+        "achieved": 66.92992401123047,
+        "constraint": 100
+      }
+    },
+    "critical_path": "loader.tx_send -> loader.pending_seed[41]",
+    "status": "timing failure; not programmed as a supported image"
+  },
+  {
+    "experiment": "Initial wide-counter loader",
+    "status": "route aborted after 654.71 seconds; no final Fmax",
+    "log": "reports/build-runtime64-initial.log"
+  },
+  {
+    "experiment": "Narrow counters, router2",
+    "status": "route aborted after 915.40 seconds during control redesign; no final Fmax",
+    "log": "reports/build-runtime64-router2.log"
+  },
+  {
+    "experiment": "Byte pipeline, router1",
+    "status": "route aborted after 711.57 seconds during control redesign; no final Fmax",
+    "log": "reports/build-runtime64-router1.log"
+  }
+]

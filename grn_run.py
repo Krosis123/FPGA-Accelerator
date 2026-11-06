@@ -9,8 +9,10 @@ from ferreira_compile import compile_graph
 from ferreira_upload import build_packet
 from grn_frontend import load_network, lower_ai
 from grn_reference import attractor
+import grn_protocol as v3
 
 PROFILE = Path(__file__).with_name('hardware_profile.json')
+DEFAULT_PROFILE = Path(__file__).with_name('profiles') / 'runtime64.json'
 
 
 def state_bytes(seed, active, width):
@@ -24,12 +26,15 @@ def state_bytes(seed, active, width):
 def compile_network(network, profile):
     # The existing routing compiler operates on physical slots. Inactive PEs
     # receive zero inputs and zero seed, so their state stays zero.
-    required = {'protocol': 2, 'capacities': [1, 2, 4, 8], 'depth': 32,
-                'max_degree': 256, 'seed_bytes': 1, 'clock_hz': 100000000}
-    for field, value in required.items():
-        if profile.get(field) != value:
-            raise ValueError(f"Unsupported hardware profile {field}={profile.get(field)!r}; "
-                             f"implemented run backend requires {value!r}")
+    if profile.get('protocol') == 3:
+        v3.validate_profile(profile)
+    else:
+        required = {'protocol': 2, 'capacities': [1, 2, 4, 8], 'depth': 32,
+                    'max_degree': 256, 'seed_bytes': 1, 'clock_hz': 100000000}
+        for field, value in required.items():
+            if profile.get(field) != value:
+                raise ValueError(f"Unsupported hardware profile {field}={profile.get(field)!r}; "
+                                 f"implemented legacy backend requires {value!r}")
     n = len(network.names)
     caps = profile['capacities']
     if not 1 <= n <= len(caps):
@@ -55,17 +60,32 @@ def compile_network(network, profile):
             raise ValueError(f"Rule {rules[dst]} is unsupported by this hardware profile")
         if degree > profile['max_degree']:
             raise ValueError(f"{network.names[dst]}: fan-in exceeds hardware maximum")
+        if degree > caps[dst] * profile['depth']:
+            raise ValueError(f"{network.names[dst]}: fan-in {degree} exceeds "
+                             f"{caps[dst]} lanes x {profile['depth']} substeps")
         for typ, sources in [('A', activation), ('I', inhibition)]:
             edges.extend({'src': indices[src], 'dst': dst, 'type': typ} for src in sources)
+    outgoing = [0] * len(caps)
+    for edge in edges:
+        outgoing[edge['src']] += 1
+    for src, count in enumerate(outgoing[:n]):
+        if count > caps[src] * profile['depth']:
+            raise ValueError(f"{network.names[src]}: fan-out {count} exceeds "
+                             f"{caps[src]} physical source copies x {profile['depth']} substeps")
     cfg = compile_graph({'genes': len(caps), 'capacities': caps,
                          'rules': rules, 'edges': edges},
                         depth=profile['depth'])
     # This checks the actual transport/backend geometry, not just a profile label.
-    build_packet(cfg)
+    if profile['protocol'] == 2:
+        build_packet(cfg)
+    else:
+        v3.routing_bytes(cfg)
     return cfg
 
 
 def run_packet(cfg, seed, active, profile):
+    if profile['protocol'] == 3:
+        return v3.run_packet(cfg, seed, active, profile)
     if profile['protocol'] != 2 or profile['seed_bytes'] != 1:
         raise ValueError("This installed backend requires run protocol v2, one seed byte")
     legacy = build_packet(cfg)
@@ -95,7 +115,11 @@ def read_exact(port, count):
     return bytes(data)
 
 
-def execute(port, packet, active):
+def execute(port, packet, active, profile=None):
+    if packet[2] == 3:
+        if profile is None:
+            raise ValueError('v3 execution requires the discovered hardware profile')
+        return v3.execute(port, packet, active, profile)
     started = time.perf_counter()
     if port.write(packet) != len(packet):
         raise IOError("Incomplete UART write")
@@ -115,7 +139,8 @@ def main():
     parser.add_argument('--network', required=True, type=Path)
     parser.add_argument('--seed', required=True, type=lambda s: int(s, 0))
     parser.add_argument('--port')
-    parser.add_argument('--profile', type=Path, default=PROFILE)
+    parser.add_argument('--profile', type=Path,
+                        help='Dry-run profile, or explicit expected image; live v3 discovers capabilities')
     parser.add_argument('--baud', type=int, default=115200)
     parser.add_argument('--timeout', type=float, default=10)
     parser.add_argument('--max-reference-states', type=int, default=1000000)
@@ -123,18 +148,25 @@ def main():
     parser.add_argument('--emit-hex', type=Path)
     args = parser.parse_args()
     try:
-        profile = json.loads(args.profile.read_text())
         network = load_network(args.network)
-        cfg = compile_network(network, profile)
-        packet = run_packet(cfg, args.seed, len(network.names), profile)
-        cpu_started = time.perf_counter()
-        reference = attractor(network, args.seed, args.max_reference_states)
-        output = {'profile': profile['id'], 'gene_indices': dict(enumerate(network.names)),
-                  'active_genes': len(network.names), 'physical_slots': len(profile['capacities']),
-                  'substeps': cfg['substeps'], 'configuration_bytes': len(packet),
-                  'reference': reference, 'reference_seconds': time.perf_counter() - cpu_started}
-        if args.emit_hex:
-            args.emit_hex.write_text(''.join(f'{b:02x}\n' for b in packet))
+        state_bytes(args.seed, len(network.names), (len(network.names)+7)//8)
+        output = {'gene_indices': dict(enumerate(network.names)), 'active_genes': len(network.names)}
+        expected_profile = json.loads(args.profile.read_text()) if args.profile else None
+
+        def prepare(profile):
+            cfg = compile_network(network, profile)
+            packet = run_packet(cfg, args.seed, len(network.names), profile)
+            output.update(profile=profile['id'], physical_slots=len(profile['capacities']),
+                          substeps=cfg['substeps'], configuration_bytes=len(packet))
+            if args.emit_hex:
+                args.emit_hex.write_text(''.join(f'{b:02x}\n' for b in packet))
+            return packet
+
+        def reference_result():
+            start = time.perf_counter()
+            result = attractor(network, args.seed, args.max_reference_states)
+            output.update(reference=result, reference_seconds=time.perf_counter()-start)
+            return result
         if not args.dry_run:
             if not args.port:
                 parser.error('--port is required unless --dry-run is used')
@@ -142,13 +174,30 @@ def main():
             with serial.Serial(args.port, args.baud, timeout=args.timeout,
                                write_timeout=args.timeout) as port:
                 port.reset_input_buffer()
-                hardware = execute(port, packet, len(network.names))
+                if expected_profile and expected_profile['protocol'] == 2:
+                    profile = expected_profile
+                else:
+                    try:
+                        profile = v3.discover(port)
+                    except v3.LegacyImage:
+                        if expected_profile:
+                            raise
+                        profile = json.loads(PROFILE.read_text())
+                        output['profile_discovery'] = 'legacy NAK; using fixed four-slot v2 profile'
+                    if expected_profile and v3.capability_payload(profile) != v3.capability_payload(expected_profile):
+                        raise ValueError('Discovered FPGA capabilities differ from --profile')
+                packet = prepare(profile)
+                reference = reference_result()
+                hardware = execute(port, packet, len(network.names), profile)
             if (hardware['period'] != reference['period'] or
                     hardware['cycle_member'] not in reference['cycle_states']):
                 raise ValueError(f"FPGA/CPU disagreement: {hardware} vs {reference}")
             hardware['execution_seconds_at_profile_clock'] = hardware['execution_cycles'] / profile['clock_hz']
             output.update(hardware=hardware, verified=True)
         else:
+            profile = expected_profile or json.loads(DEFAULT_PROFILE.read_text())
+            prepare(profile)
+            reference_result()
             output['status'] = 'compiled and CPU evaluated; FPGA not executed'
         print(json.dumps(output, indent=2))
     except (ValueError, RuntimeError, OSError, ImportError, TimeoutError) as exc:

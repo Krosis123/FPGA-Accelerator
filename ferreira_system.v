@@ -165,6 +165,7 @@ module ferreira_system #(
     wire [SWITCH_W-1:0] switch_config;
     wire [ROUTE_N-1:0] valid_config;
     wire [ROUTE_N-1:0] inhibit_config;
+    wire [ROUTE_N-1:0] valid_config_raw, inhibit_config_raw;
 
     // ----------------------------------------
     // Configuration memory
@@ -202,11 +203,20 @@ module ferreira_system #(
     assign switch_config =
         memory_word[0 +: SWITCH_W];
 
-    assign valid_config =
+    assign valid_config_raw =
         memory_word[SWITCH_W +: ROUTE_N];
 
-    assign inhibit_config =
+    assign inhibit_config_raw =
         memory_word[SWITCH_W+ROUTE_N +: ROUTE_N];
+    generate if(PIPE_ROUTING==2) begin: MASK_PIPELINE
+        reg [ROUTE_N-1:0] valid_q, inhibit_q;
+        always @(posedge clk) begin valid_q<=valid_config_raw; inhibit_q<=inhibit_config_raw; end
+        assign valid_config=valid_q;
+        assign inhibit_config=inhibit_q;
+    end else begin: DIRECT_MASKS
+        assign valid_config=valid_config_raw;
+        assign inhibit_config=inhibit_config_raw;
+    end endgenerate
 
     // ----------------------------------------
     // Pack source state copies onto MIN lines
@@ -268,8 +278,9 @@ module ferreira_system #(
     // ----------------------------------------
 
     ferreira_min #(
-        .N(ROUTE_N)
+        .N(ROUTE_N), .PIPE_MIDDLE(PIPE_ROUTING==2)
     ) min_network (
+        .clk(clk),
         .data_in(min_input),
         .cfg(switch_config),
         .data_out(min_output)

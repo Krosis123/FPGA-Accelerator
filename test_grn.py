@@ -29,6 +29,8 @@ class HostTests(unittest.TestCase):
 
     def test_parse_and_lower(self):
         for file in (ROOT / 'examples').iterdir():
+            if not file.is_file():
+                continue
             net = load_network(file)
             cfg = compile_network(net, HW)
             self.assertEqual(cfg['genes'], 4)
