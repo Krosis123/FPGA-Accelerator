@@ -19,7 +19,7 @@ ROOT=Path(__file__).parent
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port',required=True)
-    parser.add_argument('--build-env',default='runtime64-25',choices=['runtime64','runtime64-sa','runtime64-25','runtime64-25-r2'])
+    parser.add_argument('--build-env',default='runtime64-25',choices=['runtime64','runtime64-sa','runtime64-25','runtime64-25-r2','runtime64-25-sa'])
     parser.add_argument('--output',type=Path,default=ROOT/'reports/runtime64_physical.json')
     args=parser.parse_args()
     image=ROOT/'_build'/args.build_env/'hardware.bit'
