@@ -1,0 +1,228 @@
+
+`timescale 1ns/1ps
+
+module ferreira_board_top #(
+    parameter integer DEBOUNCE_CYCLES = 100000
+)(
+    input wire CLK100MHZ,
+    input wire CPU_RESETN,
+    input wire BTNC,
+    input wire [3:0] SW,
+    output wire [15:0] LED
+);
+
+    // -----------------------------------------
+    // Configuration image generated from JSON
+    // 32 addresses x 2 banks = 64 words
+    // -----------------------------------------
+
+    reg [63:0] config_rom [0:63];
+
+    initial begin
+        $readmemh("ferreira_config.mem", config_rom);
+    end
+
+    localparam [2:0]
+        S_LOAD  = 3'd0,
+        S_ARM   = 3'd1,
+        S_READY = 3'd2,
+        S_START = 3'd3,
+        S_RUN   = 3'd4,
+        S_SHOW  = 3'd5;
+
+    reg [2:0] controller_state = S_LOAD;
+    reg [5:0] cfg_index = 6'd0;
+
+    reg [3:0] selected_seed = 4'd0;
+    reg [4:0] result_period = 5'd0;
+
+    // -----------------------------------------
+    // Button synchronization and debounce
+    // -----------------------------------------
+
+    localparam integer DBW =
+        (DEBOUNCE_CYCLES < 2) ? 1 :
+        $clog2(DEBOUNCE_CYCLES);
+
+    reg [1:0] btn_sync = 2'b00;
+    reg btn_stable = 1'b0;
+    reg btn_previous = 1'b0;
+    reg [DBW-1:0] debounce_count = 0;
+
+    always @(posedge CLK100MHZ or negedge CPU_RESETN) begin
+        if (!CPU_RESETN) begin
+            btn_sync <= 0;
+            btn_stable <= 0;
+            btn_previous <= 0;
+            debounce_count <= 0;
+        end else begin
+            btn_sync <= {btn_sync[0], BTNC};
+            btn_previous <= btn_stable;
+
+            if (btn_sync[1] == btn_stable) begin
+                debounce_count <= 0;
+            end else if (debounce_count == DEBOUNCE_CYCLES-1) begin
+                btn_stable <= btn_sync[1];
+                debounce_count <= 0;
+            end else begin
+                debounce_count <= debounce_count + 1'b1;
+            end
+        end
+    end
+
+    wire button_pressed =
+        btn_stable && !btn_previous;
+
+    // -----------------------------------------
+    // Configuration write interface
+    // -----------------------------------------
+
+    wire cfg_write_en =
+        (controller_state == S_LOAD) && CPU_RESETN;
+
+    wire [4:0] cfg_write_addr = cfg_index[5:1];
+    wire cfg_write_bank = cfg_index[0];
+
+    wire [63:0] cfg_write_data =
+        config_rom[cfg_index];
+
+    // -----------------------------------------
+    // Ferreira accelerator
+    // -----------------------------------------
+
+    wire core_reset =
+        !CPU_RESETN ||
+        (controller_state == S_LOAD) ||
+        (controller_state == S_ARM) ||
+        (controller_state == S_READY);
+
+    wire core_start =
+        (controller_state == S_START);
+
+    wire core_done;
+    wire [4:0] core_period;
+    wire [3:0] slow_state;
+    wire [3:0] fast_state;
+    wire core_substep;
+    wire core_phase2;
+
+    ferreira_system #(
+        .N(4),
+        .KMAX(8),
+        .ROUTE_N(16),
+        .SUBSTEPS(2),
+        .DEPTH(32),
+        .MAX_DEGREE(256),
+        .CAP_LOG2(12'h688)
+    ) accelerator (
+        .clk(CLK100MHZ),
+        .reset(core_reset),
+        .start(core_start),
+        .seed(selected_seed),
+
+        .cfg_write_en(cfg_write_en),
+        .cfg_write_addr(cfg_write_addr),
+        .cfg_write_bank(cfg_write_bank),
+        .cfg_write_data(cfg_write_data),
+
+        .rule(4'h0),
+        .degree(36'h8040201),
+
+        .done(core_done),
+        .period(core_period),
+
+        .slow_state(slow_state),
+        .fast_state(fast_state),
+
+        .substep(core_substep),
+        .phase2(core_phase2)
+    );
+
+    // -----------------------------------------
+    // Board controller
+    // -----------------------------------------
+
+    always @(posedge CLK100MHZ or negedge CPU_RESETN) begin
+        if (!CPU_RESETN) begin
+            controller_state <= S_LOAD;
+            cfg_index <= 0;
+            selected_seed <= 0;
+            result_period <= 0;
+        end else begin
+            case (controller_state)
+
+                // Transfer all ROM words to
+                // the accelerator configuration RAM.
+                S_LOAD: begin
+                    if (cfg_index == 6'd63) begin
+                        controller_state <= S_READY;
+                    end else begin
+                        cfg_index <= cfg_index + 1'b1;
+                    end
+                end
+
+                // Reset the attractor engine.
+                S_ARM: begin
+                    controller_state <= S_START;
+                end
+
+                // Wait for the user to start.
+                S_READY: begin
+                    if (button_pressed) begin
+                        selected_seed <= SW;
+                        result_period <= 0;
+                        controller_state <= S_START;
+                    end
+                end
+
+                // Generate exactly one start pulse.
+                S_START: begin
+                    controller_state <= S_RUN;
+                end
+
+                // Wait for attractor computation.
+                S_RUN: begin
+                    if (core_done) begin
+                        result_period <= core_period;
+                        controller_state <= S_SHOW;
+                    end
+                end
+
+                // Display the result.
+                // A new button press resets the engine.
+                S_SHOW: begin
+                    if (button_pressed) begin
+                        selected_seed <= SW;
+                        result_period <= 0;
+                        controller_state <= S_ARM;
+                    end
+                end
+
+                default: begin
+                    controller_state <= S_LOAD;
+                    cfg_index <= 0;
+                end
+            endcase
+        end
+    end
+
+    // -----------------------------------------
+    // LED output mapping
+    // -----------------------------------------
+
+    assign LED[4:0] = result_period;
+    assign LED[5] = (controller_state == S_SHOW);
+    assign LED[6] =
+        (controller_state == S_START) ||
+        (controller_state == S_RUN);
+    assign LED[7] = (controller_state == S_READY);
+
+    assign LED[11:8] = selected_seed;
+
+    assign LED[12] = core_phase2;
+    assign LED[13] = core_substep;
+
+    assign LED[14] = (controller_state == S_RUN);
+    assign LED[15] = (controller_state != S_LOAD);
+
+endmodule

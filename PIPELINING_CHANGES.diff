@@ -1,0 +1,210 @@
+--- a/ferreira_engine.v
++++ b/ferreira_engine.v
+@@ -86,6 +86,9 @@
+     parameter integer KMAX = 8,
+     parameter integer SUBSTEPS = 2,
+     parameter integer RUNTIME_CONFIG = 0,
++    // Register routed data before the PE's counting logic.
++    // Each routing substep takes two clocks when enabled.
++    parameter integer PIPE_ROUTING = 0,
+     parameter integer MAX_DEGREE = 256,
+ 
+     parameter integer CW = $clog2(MAX_DEGREE+1),
+@@ -160,7 +163,48 @@
+ 
+     assign active_fast = fast_enable;
+ 
+-    assign step_valid = slow_enable || fast_enable;
++    // No extra cycle when PIPE_ROUTING=0 (legacy test compatibility).
++    // In pipelined mode: capture routed inputs in cycle A, commit the
++    // corresponding PE update in cycle B. The stage/substep only advance
++    // on cycle B, and configuration BRAM prefetch is aligned to that edge.
++    reg route_execute;
++    reg [N*KMAX-1:0] routed_inputs_q;
++    reg [N*KMAX-1:0] valid_mask_q;
++    reg [N*KMAX-1:0] inhibitor_mask_q;
++    wire in_update_stage = slow_enable || fast_enable;
++    wire commit_substep = (!PIPE_ROUTING) || route_execute;
++
++    always @(posedge clk) begin
++        if (reset) begin
++            route_execute <= 1'b0;
++            routed_inputs_q <= 0;
++            valid_mask_q <= 0;
++            inhibitor_mask_q <= 0;
++        end else if (PIPE_ROUTING) begin
++            if (in_update_stage) begin
++                if (!route_execute) begin
++                    routed_inputs_q <= routed_inputs;
++                    valid_mask_q <= valid_mask;
++                    inhibitor_mask_q <= inhibitor_mask;
++                end
++                route_execute <= ~route_execute;
++            end else begin
++                route_execute <= 1'b0;
++            end
++        end else begin
++            route_execute <= 1'b0;
++        end
++    end
++
++    wire [N*KMAX-1:0] pe_inputs =
++        PIPE_ROUTING ? routed_inputs_q : routed_inputs;
++    wire [N*KMAX-1:0] pe_valid_mask =
++        PIPE_ROUTING ? valid_mask_q : valid_mask;
++    wire [N*KMAX-1:0] pe_inhibitor_mask =
++        PIPE_ROUTING ? inhibitor_mask_q : inhibitor_mask;
++
++    // Exposed signal is the actual PE commit edge, used for BRAM prefetch.
++    assign step_valid = in_update_stage && commit_substep;
+ 
+     assign first_substep = (substep == 0);
+ 
+@@ -190,13 +234,13 @@
+         .load_seed(load_seed),
+         .seed(seed),
+ 
+-        .step_valid(slow_enable),
++        .step_valid(slow_enable && commit_substep),
+         .first_substep(first_substep),
+         .last_substep(last_substep),
+ 
+-        .routed_inputs(routed_inputs),
+-        .valid_mask(valid_mask),
+-        .inhibitor_mask(inhibitor_mask),
++        .routed_inputs(pe_inputs),
++        .valid_mask(pe_valid_mask),
++        .inhibitor_mask(pe_inhibitor_mask),
+ 
+         .rule(rule),
+         .degree(degree),
+@@ -219,13 +263,13 @@
+         .load_seed(load_seed),
+         .seed(seed),
+ 
+-        .step_valid(fast_enable),
++        .step_valid(fast_enable && commit_substep),
+         .first_substep(first_substep),
+         .last_substep(last_substep),
+ 
+-        .routed_inputs(routed_inputs),
+-        .valid_mask(valid_mask),
+-        .inhibitor_mask(inhibitor_mask),
++        .routed_inputs(pe_inputs),
++        .valid_mask(pe_valid_mask),
++        .inhibitor_mask(pe_inhibitor_mask),
+ 
+         .rule(rule),
+         .degree(degree),
+@@ -264,32 +308,35 @@
+ 
+                 // Phase 1: one S update
+                 SLOW_SEARCH: begin
+-                    if (last_substep) begin
+-                        substep <= 0;
+-                        stage <= FAST_FIRST;
+-                    end
+-                    else
+-                        substep <= substep + 1'b1;
++                    if (commit_substep) begin
++                        if (last_substep) begin
++                            substep <= 0;
++                            stage <= FAST_FIRST;
++                        end else
++                            substep <= substep + 1'b1;
++                    end
+                 end
+ 
+                 // Phase 1: first S2x update
+                 FAST_FIRST: begin
+-                    if (last_substep) begin
+-                        substep <= 0;
+-                        stage <= FAST_SECOND;
+-                    end
+-                    else
+-                        substep <= substep + 1'b1;
++                    if (commit_substep) begin
++                        if (last_substep) begin
++                            substep <= 0;
++                            stage <= FAST_SECOND;
++                        end else
++                            substep <= substep + 1'b1;
++                    end
+                 end
+ 
+                 // Phase 1: second S2x update
+                 FAST_SECOND: begin
+-                    if (last_substep) begin
+-                        substep <= 0;
+-                        stage <= CHECK_SEARCH;
+-                    end
+-                    else
+-                        substep <= substep + 1'b1;
++                    if (commit_substep) begin
++                        if (last_substep) begin
++                            substep <= 0;
++                            stage <= CHECK_SEARCH;
++                        end else
++                            substep <= substep + 1'b1;
++                    end
+                 end
+ 
+                 CHECK_SEARCH: begin
+@@ -304,12 +351,13 @@
+ 
+                 // Phase 2: advance only S
+                 SLOW_COUNT: begin
+-                    if (last_substep) begin
+-                        substep <= 0;
+-                        stage <= CHECK_PERIOD;
+-                    end
+-                    else
+-                        substep <= substep + 1'b1;
++                    if (commit_substep) begin
++                        if (last_substep) begin
++                            substep <= 0;
++                            stage <= CHECK_PERIOD;
++                        end else
++                            substep <= substep + 1'b1;
++                    end
+                 end
+ 
+                 CHECK_PERIOD: begin
+--- a/ferreira_system.v
++++ b/ferreira_system.v
+@@ -69,6 +69,7 @@
+ 
+     parameter integer SUBSTEPS = 2,
+     parameter integer RUNTIME_CONFIG = 0,
++    parameter integer PIPE_ROUTING = 0,
+     parameter integer DEPTH = 32,
+     parameter integer MAX_DEGREE = 256,
+ 
+@@ -283,6 +284,7 @@
+         .KMAX(KMAX),
+         .SUBSTEPS(SUBSTEPS),
+         .RUNTIME_CONFIG(RUNTIME_CONFIG),
++        .PIPE_ROUTING(PIPE_ROUTING),
+         .MAX_DEGREE(MAX_DEGREE),
+         .CAP_LOG2(CAP_LOG2)
+     ) engine (
+--- a/ferreira_board_top.v
++++ b/ferreira_board_top.v
+@@ -91,6 +91,7 @@
+     ferreira_system #(
+         .N(4), .KMAX(8), .ROUTE_N(16),
+         .SUBSTEPS(32), .RUNTIME_CONFIG(1),
++        .PIPE_ROUTING(1),
+         .DEPTH(32), .MAX_DEGREE(256),
+         .CAP_LOG2(12'h688)
+     ) accelerator (
+--- a/ferreira_system_tb.v
++++ b/ferreira_system_tb.v
+@@ -34,6 +34,7 @@
+         .KMAX(8),
+         .ROUTE_N(16),
+         .SUBSTEPS(2),
++        .PIPE_ROUTING(1),
+         .DEPTH(DEPTH),
+         .MAX_DEGREE(256),
+         .CAP_LOG2(12'h688)

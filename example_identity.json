@@ -1,0 +1,11 @@
+{
+  "genes": 4,
+  "capacities": [1, 2, 4, 8],
+  "rules": ["AI", "AI", "AI", "AI"],
+  "edges": [
+    {"src": 0, "dst": 0, "type": "A"},
+    {"src": 1, "dst": 1, "type": "A"},
+    {"src": 2, "dst": 2, "type": "A"},
+    {"src": 3, "dst": 3, "type": "A"}
+  ]
+}

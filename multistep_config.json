@@ -1,0 +1,66 @@
+{
+  "genes": 4,
+  "capacities": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "route_n": 16,
+  "kmax": 8,
+  "stages": 6,
+  "switch_width": 48,
+  "mem_width": 80,
+  "banks": 2,
+  "depth": 32,
+  "substeps": 4,
+  "edge_count": 7,
+  "cap_log2_verilog": "12'h688",
+  "rule_verilog": "4'h0",
+  "max_degree": 256,
+  "cw": 9,
+  "degree_verilog": "36'h8040204",
+  "writes": [
+    {
+      "addr": 0,
+      "bank": 0,
+      "data": "008b021010808200"
+    },
+    {
+      "addr": 0,
+      "bank": 1,
+      "data": "0000000000000000"
+    },
+    {
+      "addr": 1,
+      "bank": 0,
+      "data": "0001000100000000"
+    },
+    {
+      "addr": 1,
+      "bank": 1,
+      "data": "0000000000000000"
+    },
+    {
+      "addr": 2,
+      "bank": 0,
+      "data": "0001000110000000"
+    },
+    {
+      "addr": 2,
+      "bank": 1,
+      "data": "0000000000000000"
+    },
+    {
+      "addr": 3,
+      "bank": 0,
+      "data": "0001000110400000"
+    },
+    {
+      "addr": 3,
+      "bank": 1,
+      "data": "0000000000000000"
+    }
+  ],
+  "verification": "PASS: all routed edges reconstructed"
+}
