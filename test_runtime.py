@@ -69,6 +69,8 @@ class HostTests(unittest.TestCase):
 class RTLTests(unittest.TestCase):
     def simulate(self, profile, items, exercise_errors=True, label=''):
         n = len(profile['capacities'])
+        simulation_baud=profile['clock_hz']//8
+        half_period_ns=500000000/profile['clock_hz']
         suite = Path.home()/'.apio/packages/oss-cad-suite'
         if not (suite/'bin/iverilog.exe').exists(): self.skipTest('Icarus not installed')
         packets, expectations = [], []
@@ -148,9 +150,9 @@ $fwrite(log,"\\n"); $fflush(log);''')
             progressfile = ROOT/'_build'/f'runtime{n}{label}_progress.txt'
             source = f'''`timescale 1ns/1ps
 module runtime_generated_tb;
-reg clk=0; always #5 clk=~clk;
+reg clk=0; always #{half_period_ns} clk=~clk;
 reg rx=1; wire tx; wire [15:0] led;
-grn_board_top #(.N({n}),.BAUD(12500000),.PIPE_ROUTING({profile['pipe_routing']})) dut(
+grn_board_top #(.N({n}),.CLOCK_HZ({profile['clock_hz']}),.BAUD({simulation_baud}),.PIPE_ROUTING({profile['pipe_routing']})) dut(
  .CLK100MHZ(clk),.CPU_RESETN(1'b1),.BTNC(1'b0),.SW(4'b0),
  .UART_TXD_IN(rx),.UART_RXD_OUT(tx),.LED(led));
 defparam dut.loader.TIMEOUT_CYCLES=4000;
@@ -186,7 +188,7 @@ initial begin
  repeat(40) @(negedge clk);
 {chr(10).join(statements)}
 end
-initial begin #200000000; $fatal(1,"global timeout"); end
+initial begin #{200000000*100000000//profile['clock_hz']}; $fatal(1,"global timeout"); end
 endmodule
 '''
             tb=temp/'runtime_tb.v'; tb.write_text(source)
@@ -225,7 +227,7 @@ endmodule
                     with self.assertRaisesRegex(ValueError,f'code {code}'):
                         v3.receive(BytesPort(data),ident)
             (ROOT/'_build'/f'runtime{n}{label}_simulation_manifest.json').write_text(json.dumps({
-                'profile':profile,'uart_simulation_baud':12500000,
+                'profile':profile,'uart_simulation_baud':simulation_baud,
                 'source_sha256':source_hashes,'testbench_sha256':hashlib.sha256(source.encode()).hexdigest(),
                 'transactions':len(expectations),'request_sha256':[hashlib.sha256(p).hexdigest() for p in packets],
                 'verified_runs':verified},indent=2)+'\n')
@@ -233,6 +235,11 @@ endmodule
 
     def test_runtime64(self):
         self.simulate(HW,file_cases())
+
+    def test_runtime64_25mhz(self):
+        profile={**HW,'clock_hz':25000000}
+        profile['capability_crc']=v3.crc(v3.capability_payload(profile))
+        self.simulate(profile,file_cases(),label='_25mhz')
 
     def test_small_v3_rejections(self):
         profile={**HW,'capacities':[2]*4,'route_n':8,'seed_bytes':1}

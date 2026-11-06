@@ -1,0 +1,50 @@
+[
+  {
+    "network": "ring50",
+    "genes": 50,
+    "edges": 50,
+    "substeps": 2,
+    "cpu_period": 50,
+    "cpu_transient": 0,
+    "cpu_seconds": 0.0005294999573379755,
+    "predicted_hardware_cycles": 1300,
+    "configuration_bytes": 314,
+    "physical_verified": false
+  },
+  {
+    "network": "mixed54",
+    "genes": 54,
+    "edges": 113,
+    "substeps": 4,
+    "cpu_period": 3465,
+    "cpu_transient": 2,
+    "cpu_seconds": 0.09912049991544336,
+    "predicted_hardware_cycles": 173250,
+    "configuration_bytes": 522,
+    "physical_verified": false
+  },
+  {
+    "network": "broadcast64",
+    "genes": 64,
+    "edges": 64,
+    "substeps": 32,
+    "cpu_period": 1,
+    "cpu_transient": 1,
+    "cpu_seconds": 4.770001396536827e-05,
+    "predicted_hardware_cycles": 386,
+    "configuration_bytes": 3434,
+    "physical_verified": false
+  },
+  {
+    "network": "majority64_full",
+    "genes": 64,
+    "edges": 127,
+    "substeps": 32,
+    "cpu_period": 1,
+    "cpu_transient": 0,
+    "cpu_seconds": 3.239989746361971e-05,
+    "predicted_hardware_cycles": 386,
+    "configuration_bytes": 3434,
+    "physical_verified": false
+  }
+]
