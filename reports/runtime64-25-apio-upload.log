@@ -1,0 +1,36 @@
+Using env runtime64-25-spread (nexys-a7-100t)
+Checking device presence...
+- FILTER [VID=0403, PID=6010]
+- DEVICE [0403:6010] [1:5] [Digilent] [Digilent USB Device] [210292A4BD8A]
+-------------------------------------------------------------------------------
+Setting shell vars.
+nextpnr-xilinx --device xc7a100tcsg324-1 -o xdc=pins.xdc -o fasm=_build\runtime64-25-spread\hardware.fasm --json _build\runtime64-25-spread\hardware.json --report _build\runtime64-25-spread\hardware.pnr -q --placer-heap-congestion-spread --router router2 --threads 4
+
+openFPGALoader --force-terminal-mode --verify --board nexys_a7_100 _build\runtime64-25-spread\hardware.bit
+
+Jtag frequency : requested 6.00MHz    -> real 6.00MHz   
+
+Open file _build\runtime64-25-spread\hardware.bit DONE
+
+Parse file Unknown key Generator
+
+DONE
+
+load program
+
+
+Load SRAM: [=========                                         ] 18.00%
+Load SRAM: [===================                               ] 38.00%
+Load SRAM: [============================                      ] 56.00%
+Load SRAM: [=============================                     ] 58.00%
+Load SRAM: [=======================================           ] 78.00%
+Load SRAM: [================================================= ] 97.00%
+Load SRAM: [===================================================] 100.00%
+
+Done
+
+Shift IR 35
+
+ir: 1 isc_done 1 isc_ena 0 init 1 done 1
+
+======================== [SUCCESS] Took 228.70 seconds ========================

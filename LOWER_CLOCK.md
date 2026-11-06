@@ -68,6 +68,11 @@ periods and returned cycle members matched the independent CPU oracle. All
 measured execution clocks matched the independently calculated Floyd schedule.
 The four networks below were also run individually through `grn_run.py`, still
 without reprogramming. See `reports/*_physical_cli.json` for those full results.
+The standard `apio upload -e runtime64-25-spread` was then tested. It produced
+the identical bitstream SHA256, and a second complete 27-run UART regression
+plus CRC rejection/recovery passed after that upload. The second machine report
+is `reports/runtime64_apio_physical.json`. A following default-verbosity
+`apio build -e runtime64-25-spread` reported the build up to date.
 
 | Network | Genes | Edges | Substeps | FPGA period | CPU transient | FPGA clocks | Compute time at 25 MHz | Observed request-to-ACK |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -99,6 +104,8 @@ timing failure.
   differs from the synthesis primitive count; both raw reports are retained.
 * Bitstream SHA256:
   `998ba901453945cd00f4649d9d1f9ab019d707cc3a8e0376267d45da2d749b24`.
+* Qualified bitstream and original intermediate results are archived in
+  `artifacts/qualified-runtime64-25` in addition to the active build directory.
 * Integrated 25 MHz UART simulation: 43 transactions, source-hash matched.
 * Host/legacy integration: 10 Python tests, including 106 legacy UART runs.
 * APIO: six testbenches passed, including all 256 UART bytes at 25 MHz/115200.
@@ -108,3 +115,8 @@ silicon Fmax. 128 slots remain simulation-only. Hardware still returns period,
 a cycle member and execution clocks; transient/entry/cycle lists come from the
 CPU. Supported functions remain exact AI/MAJ with the declared routing limits,
 not unrestricted Boolean expressions or complete attractor enumeration.
+
+Keep build/upload verbosity consistent for cache reuse: APIO includes the
+nextpnr quiet/verbose command in its build signature. Switching from
+`--verbose-pnr` to a default upload can rerun place-and-route. The verified
+commands above both use default verbosity.

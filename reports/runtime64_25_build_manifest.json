@@ -27,9 +27,16 @@
     "_build\\runtime64-25-spread\\hardware.json": "9f175ac6f8dd1203c8d715ca9e37cc826c1f3c3a2919ead8012ddf1180baf813",
     "_build\\runtime64-25-spread\\hardware.pnr": "5f9882e177c26553d7fcb6b5cdefdd27ca9fefd39979da2371d9c8594b7656e7",
     "pins.xdc": "b818fe728f109d7b486eae0358f409c5d81d19204c8cfc305f9cd07ac68d16b9",
-    "grn_clock25_top.v": "435294140a7b718b3eb5361ed330cda0ea30fd7a3399ceb3986c909d62ccd936"
+    "grn_clock25_top.v": "435294140a7b718b3eb5361ed330cda0ea30fd7a3399ceb3986c909d62ccd936",
+    "_build\\runtime64-25-spread\\hardware.fasm": "a75eb672470396b1c0658d0d59a9551b2e2195b4d1f45b8536e6febcd5830de8",
+    "_build\\runtime64-25-spread\\hardware.frames": "326c88757063270a1f463983e9c592be3a2e822efccb82067e577ce9b5d25825"
   },
   "physical_report": "reports/runtime64_physical.json",
   "programming_log": "reports/runtime64-25-programming.log",
-  "physical_success": true
+  "physical_success": true,
+  "apio_upload_verified": true,
+  "apio_upload_bitstream_identical": true,
+  "post_apio_physical_report": "reports/runtime64_apio_physical.json",
+  "cached_build_verified": true,
+  "archive": "artifacts/qualified-runtime64-25"
 }

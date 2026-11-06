@@ -1,0 +1,28 @@
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  2 substeps= 2 cycles=    52
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS small4               genes= 4 period=  1 substeps= 2 cycles=    26
+PASS ring20               genes=20 period= 20 substeps= 2 cycles=   520
+PASS ring50               genes=50 period= 50 substeps= 2 cycles=  1300
+PASS mixed54              genes=54 period=3465 substeps= 4 cycles=173250
+PASS ring54               genes=54 period= 54 substeps= 2 cycles=  1404
+PASS ring64               genes=64 period= 64 substeps= 2 cycles=  1664
+PASS broadcast64          genes=64 period=  1 substeps=32 cycles=   386
+PASS constant64           genes=64 period=  1 substeps= 2 cycles=    26
+PASS majority64_full      genes=64 period=  1 substeps=32 cycles=   386
+PASS majority64_tie       genes=64 period=  1 substeps=32 cycles=   386
+PASS majority64_rise      genes=64 period=  1 substeps=32 cycles=   386
+PASS small4_after_large   genes= 4 period=  2 substeps= 2 cycles=    52
+PASS: 27 physical executions, bad-CRC rejection and recovery; reports\runtime64_apio_physical.json
