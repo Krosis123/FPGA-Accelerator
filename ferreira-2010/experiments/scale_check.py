@@ -26,12 +26,13 @@ def main():
     suite = packages / 'oss-cad-suite'
     openxc7 = packages / 'openxc7'
     env = {**os.environ, 'PATH': os.pathsep.join(map(str, [suite/'bin', suite/'lib',
-                  openxc7/'bin', openxc7/'lib'])) + os.pathsep + os.environ['PATH']}
+                                                           openxc7/'bin', openxc7/'lib'])) + os.pathsep + os.environ['PATH']}
     out = ROOT / '_build/scale'
     out.mkdir(parents=True, exist_ok=True)
     sources = [str(ROOT / name) for name in ['ferreira_system.v', 'ferreira_min.v',
-                                            'ferreira_engine.v', 'ferreira_pe.v']]
+                                             'ferreira_engine.v', 'ferreira_pe.v']]
     summary = []
+
     def run(command, log, timeout=600):
         with log.open('w') as stream:
             subprocess.run(command, cwd=ROOT, env=env, stdout=stream,
@@ -41,22 +42,23 @@ def main():
         if n < 2:
             raise ValueError('Capacity experiment requires at least two genes')
         cfg = compile_graph({'genes': n, 'capacities': [2]*n,
-            'edges': [{'src': i, 'dst': (i+1) % n, 'type': 'A'} for i in range(n)]})
+                             'edges': [{'src': i, 'dst': (i+1) % n, 'type': 'A'} for i in range(n)]})
         statements = []
         for word in cfg['writes']:
-            statements.append(f"@(negedge clk); we=1; addr={word['addr']}; bank={word['bank']}; data=64'h{word['data']};")
+            statements.append(
+                f"@(negedge clk); we=1; addr={word['addr']}; bank={word['bank']}; data=64'h{word['data']};")
         # Two seeds including the highest physical bit, loaded without switches.
         # Both networks are full-width rings; no graph information in core RTL.
         source = f'''module scale_tb;
 reg clk=0; always #5 clk=~clk;
 reg reset=1,start=0,we=0;
 reg [{n-1}:0] seed=1;
-reg [4:0] addr=0; reg [{max(1,(cfg['banks']-1).bit_length())-1}:0] bank=0;
+reg [4:0] addr=0; reg [{max(1, (cfg['banks']-1).bit_length())-1}:0] bank=0;
 reg [63:0] data=0;
 wire done; wire [{n}:0] period; wire [{n-1}:0] state;
 ferreira_system #(.N({n}),.KMAX(2),.ROUTE_N({cfg['route_n']}),
  .SUBSTEPS(32),.RUNTIME_CONFIG(1),.PIPE_ROUTING(1),.DEPTH(32),
- .CAP_LOG2({3*n}'h{int(cfg['cap_log2_verilog'].split("'h")[1],16):x})) core(
+ .CAP_LOG2({3*n}'h{int(cfg['cap_log2_verilog'].split("'h")[1], 16):x})) core(
  .clk(clk),.reset(reset),.start(start),.seed(seed),
  .last_substep_index(5'd{cfg['substeps']-1}),.cfg_write_en(we),
  .cfg_write_addr(addr),.cfg_write_bank(bank),.cfg_write_data(data),
@@ -94,7 +96,7 @@ endmodule'''
         if args.synth or args.pnr:
             design = out / f'n{n}.json'
             ys = out / f'n{n}.ys'
-            ys.write_text('read_verilog ' + ' '.join('"'+s.replace('\\','/')+'"' for s in
+            ys.write_text('read_verilog ' + ' '.join('"'+s.replace('\\', '/')+'"' for s in
                           [*sources, str(ROOT/'experiments/scale_top.v')]) + '\n' +
                           f'chparam -set N {n} scale_top\n' +
                           'synth_xilinx -family xc7 -top scale_top -flatten\n' +
@@ -102,14 +104,14 @@ endmodule'''
             run([str(suite/'bin/yosys.exe'), '-s', str(ys)], out / f'n{n}_synthesis.log')
             import collections
             cells = collections.Counter(c['type'] for c in
-                    json.loads(design.read_text())['modules']['scale_top']['cells'].values())
+                                        json.loads(design.read_text())['modules']['scale_top']['cells'].values())
             record['synthesis_cells'] = dict(sorted(cells.items()))
             if args.pnr:
                 xdc = out / 'scale.xdc'
                 xdc.write_text('create_clock -period 10.000 [get_ports {clk}]\n' + '\n'.join(
                     f'set_property -dict {{PACKAGE_PIN {pin} IOSTANDARD LVCMOS33}} [get_ports {{{port}}}]'
-                    for port,pin in zip(['clk','reset','start','shift_en','shift_bit','write_en','read_en','result_bit','done'],
-                                       ['E3','C12','N17','J15','L16','M13','R15','H17','K15'])))
+                    for port, pin in zip(['clk', 'reset', 'start', 'shift_en', 'shift_bit', 'write_en', 'read_en', 'result_bit', 'done'],
+                                         ['E3', 'C12', 'N17', 'J15', 'L16', 'M13', 'R15', 'H17', 'K15'])))
                 report = out / f'n{n}.pnr'
                 command = [str(openxc7/'bin/nextpnr-xilinx.exe'), '--device', 'xc7a100tcsg324-1',
                            '-o', f'xdc={xdc}', '--json', str(design), '--report', str(report)]
@@ -121,7 +123,8 @@ endmodule'''
                 if report.exists():
                     report_data = json.loads(report.read_text())
                     record['fmax'] = report_data['fmax']
-                    record['utilization'] = {k:v for k,v in report_data['utilization'].items() if v['used']}
+                    record['utilization'] = {k: v for k,
+                                             v in report_data['utilization'].items() if v['used']}
         summary.append(record)
         (ROOT/'reports/scale_results.json').write_text(json.dumps(summary, indent=2))
     if any(record.get('place_route_pass') is False for record in summary):
@@ -129,4 +132,5 @@ endmodule'''
         raise SystemExit(1)
 
 
-if __name__ == '__main__': main()
+if __name__ == '__main__':
+    main()

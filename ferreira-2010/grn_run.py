@@ -35,10 +35,12 @@ def compile_network(network, profile):
             if profile.get(field) != value:
                 raise ValueError(f"Unsupported hardware profile {field}={profile.get(field)!r}; "
                                  f"implemented legacy backend requires {value!r}")
+
     n = len(network.names)
     caps = profile['capacities']
     if not 1 <= n <= len(caps):
         raise ValueError(f"Network has {n} genes; profile has {len(caps)} slots")
+
     edges = []
     rules = ['AI'] * len(caps)
     indices = {name: i for i, name in enumerate(network.names)}
@@ -65,6 +67,7 @@ def compile_network(network, profile):
                              f"{caps[dst]} lanes x {profile['depth']} substeps")
         for typ, sources in [('A', activation), ('I', inhibition)]:
             edges.extend({'src': indices[src], 'dst': dst, 'type': typ} for src in sources)
+
     outgoing = [0] * len(caps)
     for edge in edges:
         outgoing[edge['src']] += 1
@@ -72,6 +75,7 @@ def compile_network(network, profile):
         if count > caps[src] * profile['depth']:
             raise ValueError(f"{network.names[src]}: fan-out {count} exceeds "
                              f"{caps[src]} physical source copies x {profile['depth']} substeps")
+
     cfg = compile_graph({'genes': len(caps), 'capacities': caps,
                          'rules': rules, 'edges': edges},
                         depth=profile['depth'])
@@ -150,7 +154,8 @@ def main():
     try:
         network = load_network(args.network)
         state_bytes(args.seed, len(network.names), (len(network.names)+7)//8)
-        output = {'gene_indices': dict(enumerate(network.names)), 'active_genes': len(network.names)}
+        output = {'gene_indices': dict(enumerate(network.names)),
+                  'active_genes': len(network.names)}
         expected_profile = json.loads(args.profile.read_text()) if args.profile else None
 
         def prepare(profile):
@@ -192,7 +197,8 @@ def main():
             if (hardware['period'] != reference['period'] or
                     hardware['cycle_member'] not in reference['cycle_states']):
                 raise ValueError(f"FPGA/CPU disagreement: {hardware} vs {reference}")
-            hardware['execution_seconds_at_profile_clock'] = hardware['execution_cycles'] / profile['clock_hz']
+            hardware['execution_seconds_at_profile_clock'] = hardware['execution_cycles'] / \
+                profile['clock_hz']
             output.update(hardware=hardware, verified=True)
         else:
             profile = expected_profile or json.loads(DEFAULT_PROFILE.read_text())

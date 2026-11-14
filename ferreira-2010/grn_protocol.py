@@ -40,7 +40,7 @@ def receive(port, request_id):
     first = read_exact(port, 1)
     if first == b'\x15':
         raise LegacyImage('Legacy FPGA image rejected v3; upload the runtime64 image '
-                         'or select --profile hardware_profile.json for the four-slot image')
+                          'or select --profile hardware_profile.json for the four-slot image')
     header = first + read_exact(port, 9)
     if header[:2] != b'FR' or header[2] != 3:
         raise ValueError('Invalid v3 response framing')
@@ -53,7 +53,8 @@ def receive(port, request_id):
         raise ValueError('Response CRC mismatch')
     if opcode == 0xff:
         code = payload[0] if len(payload) == 1 else -1
-        raise ValueError(f'FPGA rejected request: {ERRORS.get(code, "unknown error")} (code {code})')
+        raise ValueError(
+            f'FPGA rejected request: {ERRORS.get(code, "unknown error")} (code {code})')
     return opcode, payload
 
 
@@ -67,7 +68,8 @@ def capability_payload(profile):
 def profile_from_capabilities(payload):
     if len(payload) < 16:
         raise ValueError('Truncated hardware capability response')
-    clock, n, depth, degree, route_n, kmax, cw, flags, pipeline = struct.unpack('<IHHHHBBBB', payload[:16])
+    clock, n, depth, degree, route_n, kmax, cw, flags, pipeline = struct.unpack(
+        '<IHHHHBBBB', payload[:16])
     if not 1 <= n <= 4096 or len(payload) != 16+n:
         raise ValueError('Invalid hardware capacity declaration')
     if any(log > 5 for log in payload[16:]):
@@ -99,7 +101,7 @@ def validate_profile(profile):
         raise ValueError('Hardware configuration depth must be a power of two in 2..32768')
     if profile.get('seed_bytes') != (len(caps)+7)//8:
         raise ValueError('Seed byte width differs from hardware state width')
-    if profile.get('protocol') != 3 or profile.get('pipe_routing') not in (1,2):
+    if profile.get('protocol') != 3 or profile.get('pipe_routing') not in (1, 2):
         raise ValueError('Unsupported hardware protocol or routing pipeline')
     if profile.get('clock_hz', 0) <= 0 or profile.get('rules') != ['AI', 'MAJ']:
         raise ValueError('Invalid hardware clock or rule capabilities')

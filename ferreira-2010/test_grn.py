@@ -68,6 +68,7 @@ class HostTests(unittest.TestCase):
             def __init__(self, reply): self.reply = bytearray(reply)
             def write(self, packet): return len(packet)
             def flush(self): pass
+
             def read(self, count):
                 part = bytes(self.reply[:min(count, 2)])
                 del self.reply[:len(part)]
@@ -75,9 +76,12 @@ class HostTests(unittest.TestCase):
         payload = bytes([2, 2, 2, 1]) + (36).to_bytes(8, 'little')
         frame = b'FR' + payload + binascii.crc_hqx(payload, 0xffff).to_bytes(2, 'little')
         self.assertEqual(execute(Port(b'\x06' + frame), b'packet', 2)['period'], 2)
-        with self.assertRaises(ValueError): execute(Port(b'\x15'), b'packet', 2)
-        with self.assertRaises(TimeoutError): execute(Port(b''), b'packet', 2)
-        with self.assertRaises(ValueError): decode_result(frame[:-1] + bytes([frame[-1] ^ 1]), 2)
+        with self.assertRaises(ValueError):
+            execute(Port(b'\x15'), b'packet', 2)
+        with self.assertRaises(TimeoutError):
+            execute(Port(b''), b'packet', 2)
+        with self.assertRaises(ValueError):
+            decode_result(frame[:-1] + bytes([frame[-1] ^ 1]), 2)
 
 
 class RTLTests(unittest.TestCase):
@@ -200,13 +204,15 @@ endmodule
             tb.write_text(source)
             rtl = [str(ROOT / f) for f in ['ferreira_board_top.v', 'ferreira_uart.v',
                    'ferreira_uart_loader.v', 'ferreira_engine.v', 'ferreira_system.v',
-                   'ferreira_pe.v', 'ferreira_min.v']]
-            env = {**os.environ, 'PATH': str(suite) + os.pathsep + str(suite.parent / 'lib') + os.pathsep + os.environ['PATH']}
+                                           'ferreira_pe.v', 'ferreira_min.v']]
+            env = {**os.environ, 'PATH': str(suite) + os.pathsep +
+                   str(suite.parent / 'lib') + os.pathsep + os.environ['PATH']}
             for cmd in [[iverilog, '-g2012', '-s', 'uart_generated_tb', '-o', str(out), *rtl, str(tb)],
                         [vvp, str(out)]]:
                 result = subprocess.run(cmd, capture_output=True, text=True, timeout=180, env=env)
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-                if result.stdout: print(result.stdout.strip())
+                if result.stdout:
+                    print(result.stdout.strip())
 
 
 if __name__ == '__main__':
